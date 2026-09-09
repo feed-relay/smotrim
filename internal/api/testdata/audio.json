@@ -1,0 +1,131 @@
+{
+  "status": "OK",
+  "notice": null,
+  "noticeButton": null,
+  "noticeLink": null,
+  "auth": {
+    "code": 0,
+    "message": ""
+  },
+  "data": {
+    "id": 1316241,
+    "publicId": 2883598,
+    "duration": 586,
+    "progress": 0,
+    "type": "full_audio",
+    "shareLink": "https://smotrim.ru/brand/67390#playing_audio=2883598",
+    "ageRestriction": 12,
+    "disclaimers": [
+      {
+        "warning": "age",
+        "text": "Этот контент предназначен для аудитории старше 12 лет"
+      },
+      {
+        "warning": "drug",
+        "text": "Незаконное потребление наркотических средств, психотропных веществ, их аналогов причиняет вред здоровью, их незаконный оборот запрещен и влечет установленную законодательством ответственность"
+      },
+      {
+        "warning": "meta_company",
+        "text": "Деятельность компании META PLATFORMS INC. (Facebook, Instagram) на территории России запрещена"
+      },
+      {
+        "warning": "smoking",
+        "text": "Употребление табака вредит вашему здоровью"
+      }
+    ],
+    "disclaimersTiming": 10,
+    "brand": {
+      "id": 67390,
+      "title": "Имя и время",
+      "type": "radiobroadcast",
+      "totalEpisodes": 103,
+      "yearReleasedFrom": 2022,
+      "yearReleasedTo": null,
+      "poster": {
+        "large": "https://cdn.smotrim.ru/photobank/prod/original/902/503/4.png",
+        "medium": "https://cdn.smotrim.ru/photobank/prod/original/902/503/4.png",
+        "small": "https://cdn.smotrim.ru/photobank/prod/original/902/503/4.png"
+      },
+      "genres": [
+        28,
+        59
+      ]
+    },
+    "episode": {
+      "id": 3590319,
+      "title": "Сальери от мира науки",
+      "airDate": "2025-12-22T14:35:00+03:00",
+      "number": 25,
+      "tariff": "public_content",
+      "season": {
+        "title": "",
+        "number": 2025
+      },
+      "splash": {
+        "large": "https://cdn.smotrim.ru/photobank/prod/original/902/503/6.png",
+        "medium": "https://cdn.smotrim.ru/photobank/prod/original/902/503/6.png",
+        "small": "https://cdn.smotrim.ru/photobank/prod/original/902/503/6.png"
+      }
+    },
+    "streams": {
+      "mp3": "https://podcast.smotrim.ru/audio/001/316/241.mp3?entity=audio&id=1316241&sign=a1cf947a0c75a4a813b5285b132932d1",
+      "http": null,
+      "downloadAvailability": {
+        "status": "AUDIO_DISALLOW_DOWNLOAD_TARIFF",
+        "notice": "Скачать аудио можно только по подписке",
+        "noticeButton": "Оформить за 249 ₽"
+      }
+    },
+    "adverts": [
+      {
+        "type": "preroll",
+        "advertConfig": {
+          "p1SmartTv": null,
+          "p2SmartTv": null,
+          "ownerIdSmartTv": 166267,
+          "p1": "cqcje",
+          "p2": "flgb",
+          "ownerId": 166267,
+          "freez": 240,
+          "freezIn": 10,
+          "duration": 30,
+          "mobileSdkAndroid": "adfox",
+          "adFoxPageIdAndroidOS": 17302987,
+          "adFoxPageIdAndroidTV": 11767728,
+          "mobileSdkIOS": "adfox",
+          "adFoxPageIdIOS": 1258107
+        },
+        "anonsConfig": null,
+        "timings": {
+          "start": 30,
+          "period": null
+        }
+      },
+      {
+        "type": "midroll",
+        "advertConfig": {
+          "p1SmartTv": null,
+          "p2SmartTv": null,
+          "ownerIdSmartTv": 166267,
+          "p1": "cwleb",
+          "p2": "fsyg",
+          "ownerId": 166267,
+          "freez": 240,
+          "freezIn": 10,
+          "duration": 45,
+          "mobileSdkAndroid": "adfox",
+          "adFoxPageIdAndroidOS": 17302987,
+          "adFoxPageIdAndroidTV": 11767728,
+          "mobileSdkIOS": "adfox",
+          "adFoxPageIdIOS": 1258107
+        },
+        "anonsConfig": null,
+        "timings": {
+          "start": null,
+          "period": 900
+        }
+      }
+    ],
+    "counterBigTv": null
+  }
+}

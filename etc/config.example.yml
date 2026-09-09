@@ -1,0 +1,34 @@
+logger:
+  level: debug
+  format: json
+  output: both
+  add_source: false
+  file_path: var/log/log.log
+  rotation:
+    max_size_mb: 100
+    max_backups: 3
+    max_age_days: 28
+    compress: true
+  fields:
+    service: fr-smotrim
+
+http:
+  timeout: 60s
+
+test_data: true
+output_dir: var/rss
+itunes_owner_name: "Feed Relay Smotrim"
+itunes_owner_email: "feed-relay@example.com"
+generator: "Feed Relay Smotrim v0.1.0 (github.com/feed-relay/smotrim)"
+
+subscriptions:
+  - limit: 5
+    shows:
+      - "https://smotrim.ru/brand/57166" # radiorus: О животных с Иваном Затевахиным
+      - "57128" # radiorus: Литературный сериал
+
+  - limit: 3
+    shows:
+      - "67390" # radiorus: Имя и время
+      - "62250" # mayak: Физики и лирики
+      - "65319" # mayak: АудиоСторис
