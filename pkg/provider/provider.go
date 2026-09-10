@@ -22,8 +22,8 @@ import (
 //go:generate moq --out ./mocks/adapter_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . Adapter
 //go:generate moq --out ./mocks/sub_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . Sub
 
-// platform is this provider's identifier.
-const platform = "smotrim"
+// Platform is this provider's identifier.
+const Platform = "smotrim"
 
 // feedWorkers is the maximum number of shows processed concurrently.
 const feedWorkers = 4
@@ -93,7 +93,7 @@ func NewProvider(config Config) *Provider {
 }
 
 func (p *Provider) Platform() string {
-	return platform
+	return Platform
 }
 
 // Feeds builds an RSS feed for every show across subscriptions, keyed by
