@@ -1,0 +1,2094 @@
+{
+  "brands": {
+    "data": [
+      {
+        "id": 75258,
+        "title": "О чем молчат памятники",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 38526,
+        "title": "Зимний вальс",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 61853,
+        "title": "В 6 часов вечера после войны",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 5,
+          "enum": "Radiobroadcast"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 81,
+            "title": "Радио Маяк",
+            "slug": "/channel/81"
+          }
+        ]
+      },
+      {
+        "id": 61869,
+        "title": "Торт для Матецкого",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 5,
+          "enum": "Radiobroadcast"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 81,
+            "title": "Радио Маяк",
+            "slug": "/channel/81"
+          }
+        ]
+      },
+      {
+        "id": 64401,
+        "title": "Русские в Африке",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 3,
+            "title": "Россия 24",
+            "slug": "/channel/3"
+          }
+        ]
+      },
+      {
+        "id": 60102,
+        "title": "Итоги года",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 5,
+          "enum": "Radiobroadcast"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 81,
+            "title": "Радио Маяк",
+            "slug": "/channel/81"
+          }
+        ]
+      },
+      {
+        "id": 10213,
+        "title": "Гений из \"шарашки\". Авиаконструктор Бартини",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          },
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 75266,
+        "title": "Поехали!",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 58458,
+        "title": "Екатерина",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 39105,
+        "title": "Жена офицера",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 62719,
+        "title": "Берёзка",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4721,
+        "title": "Футболист Валерий Воронин. Потерять лицо",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75268,
+        "title": "Настоящая война престолов",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 4751,
+        "title": "Тайна семейной жизни педагога Макаренко",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 60850,
+        "title": "После многих бед",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 64581,
+        "title": "Побег",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 75271,
+        "title": "Театры на краю. Санкт-Петербург",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 65380,
+        "title": "Мир. Дружба. Пушкин",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 3,
+            "title": "Россия 24",
+            "slug": "/channel/3"
+          }
+        ]
+      },
+      {
+        "id": 64619,
+        "title": "Огонь",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4757,
+        "title": "Бомба для певца. Владимир Мигуля",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4768,
+        "title": "Черный бизнес развитого социализма. Цеховики",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75278,
+        "title": "К 80-летию. Владимир Жириновский",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75351,
+        "title": "Учитель фехтования",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 64653,
+        "title": "Д'Артаньян и три мушкетера",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 75575,
+        "title": "Россия XXI век",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 64656,
+        "title": "Музыка моей души",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 64658,
+        "title": "Сильная Ты",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4773,
+        "title": "Гример. Профессор маскировки",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 69622,
+        "title": "Мост с русским характером",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 3,
+            "title": "Россия 24",
+            "slug": "/channel/3"
+          }
+        ]
+      },
+      {
+        "id": 75352,
+        "title": "Дерзкая",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 4774,
+        "title": "Прерванное молчание. Муслим Магомаев",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 64678,
+        "title": "Звезда пленительного счастья",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          },
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 4791,
+        "title": "Русский \"Титаник\". Дожить до рассвета",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 58358,
+        "title": "Узнай меня, если сможешь",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4797,
+        "title": "Страсти по Солоницыну",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 15587,
+        "title": "Охота на призраков",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75392,
+        "title": "Восток. Непокоренный",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 3,
+            "title": "Россия 24",
+            "slug": "/channel/3"
+          }
+        ]
+      },
+      {
+        "id": 41966,
+        "title": "Васильки",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4820,
+        "title": "Дворжецкие. Вызов судьбе",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 62740,
+        "title": "Трудности перевода",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 3,
+            "title": "Россия 24",
+            "slug": "/channel/3"
+          }
+        ]
+      },
+      {
+        "id": 75395,
+        "title": "Вечерний свет. Людмила Аринина",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 4,
+          "enum": "Program"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 4823,
+        "title": "Покушение на Данаю",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 62862,
+        "title": "Версия",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4827,
+        "title": "Джентльмен неудачи. Режиссер Александр Серый",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 66578,
+        "title": "Профиль убийцы",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 75678,
+        "title": "Аэропорт",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75711,
+        "title": "Сказки про Билибина",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 5202,
+        "title": "Воровка",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75433,
+        "title": "Женщина в белом",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 71319,
+        "title": "Один в один",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 6,
+          "enum": "Show"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75542,
+        "title": "Тебе звонит судьба",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 71718,
+        "title": "Может, хватит?!",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 6,
+          "enum": "Show"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 63178,
+        "title": "Другие",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 42845,
+        "title": "Аншлаг и Компания",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 4,
+          "enum": "Program"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75485,
+        "title": "Театральный поезд",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 4,
+          "enum": "Program"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 75619,
+        "title": "Вести ПФО. Приволжье",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 4,
+          "enum": "Program"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 359,
+            "title": "Нижний Новгород 24",
+            "slug": "/channel/359"
+          },
+          {
+            "id": 561,
+            "title": "Россия 1. Нижний Новгород",
+            "slug": "/channel/rossiya1-nizhnii-novgorod"
+          },
+          {
+            "id": 643,
+            "title": "Россия 24. Нижний Новгород",
+            "slug": "/channel/rossiya24-nizhnii-novgorod"
+          },
+          {
+            "id": 727,
+            "title": "Радио России. Нижний Новгород",
+            "slug": "/channel/radio-rossii-nizhnii-novgorod"
+          }
+        ]
+      },
+      {
+        "id": 75452,
+        "title": "Крепость. История российского кризиса",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 75554,
+        "title": "Письма из Мариуполя",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 3,
+            "title": "Россия 24",
+            "slug": "/channel/3"
+          }
+        ]
+      },
+      {
+        "id": 75453,
+        "title": "Российский хоккей. Сила внутри",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 67522,
+        "title": "Малахов",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 4,
+          "enum": "Program"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 70233,
+        "title": "Откровенно с Грачевой. Сама виновата?",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 12,
+          "enum": "Interview"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 4872,
+        "title": "Гибель адмиралов. Тайна одной авиакатастрофы",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75456,
+        "title": "30 лет добра. История благотворительности в России",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 4895,
+        "title": "Дорогой Леонид Ильич!",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 33969,
+        "title": "Маша",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4909,
+        "title": "Тайна черной доски. Владимир Солоухин",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4910,
+        "title": "Наедине со всеми. Драматург Гельман вчера, сегодня, завтра",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 69401,
+        "title": "Как кот Васька в третий класс перешел",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 2,
+          "enum": "Multfilm"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 75659,
+        "title": "Родной голос. Поет и рассказывает Ольга Воронец",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 4,
+          "enum": "Program"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 64867,
+        "title": "Виражи судьбы",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4913,
+        "title": "Урок французского. Мирей Матье, Джо Дассен и другие...",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4914,
+        "title": "Великие пророчицы. Ванга и Матрона",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4966,
+        "title": "Великие комбинаторы",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 4990,
+        "title": "Триумф смешной девчонки. Алиса Фрейндлих",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 75270,
+        "title": "Родник",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 4,
+            "title": "Россия К",
+            "slug": "/channel/4"
+          }
+        ]
+      },
+      {
+        "id": 6442,
+        "title": "Непобедимый",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 4993,
+        "title": "Исключительно наука. Никакой политики. Андрей Сахаров",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 9617,
+        "title": "Убийство Романовых. Последний аргумент",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          },
+          {
+            "id": 3,
+            "title": "Россия 24",
+            "slug": "/channel/3"
+          }
+        ]
+      },
+      {
+        "id": 75460,
+        "title": "Это все ваши?",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 5040,
+        "title": "Поезд-призрак. Тайна золота Колчака",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 9420,
+        "title": "Человек без лица. Пеньковский",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        },
+        "channels": [
+          {
+            "id": 1,
+            "title": "Россия 1",
+            "slug": "/channel/1"
+          }
+        ]
+      },
+      {
+        "id": 5055,
+        "title": "Маршал Лелик Табаков",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 75466,
+        "title": "Звуки войны",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 5,
+          "enum": "Radiobroadcast"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 75435,
+        "title": "Варькина земля",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 75475,
+        "title": "Булату Окуджаве посвящается... Переделкино - 2026",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 4,
+          "enum": "Program"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 71246,
+        "title": "Чтения Победы",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 5,
+          "enum": "Radiobroadcast"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 75476,
+        "title": "Константин Ваншенкин. Вернувшийся",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 75477,
+        "title": "Был месяц май. Рука над пшеничным полем",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 44706,
+        "title": "Вдовы",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 26678,
+        "title": "Великолепные Эмберсоны",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 5221,
+        "title": "Убийство в Каннах. Савва Морозов",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 75480,
+        "title": "Вести. Донецк. Специальный Репортаж",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 4,
+          "enum": "Program"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 66691,
+        "title": "Шериф",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 45223,
+        "title": "Волк с Уолл-стрит",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 70873,
+        "title": "Вести. Магадан. Закон и порядок",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 4,
+          "enum": "Program"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 75492,
+        "title": "Классическая проза",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 5,
+          "enum": "Radiobroadcast"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 5307,
+        "title": "Достоевский",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 66604,
+        "title": "Опергруппа",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 3,
+          "enum": "Serial"
+        },
+        "tariff": {
+          "id": 5,
+          "enum": "SubscriptionContent"
+        }
+      },
+      {
+        "id": 59280,
+        "title": "Радиошкола детских писателей",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 5,
+          "enum": "Radiobroadcast"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      },
+      {
+        "id": 69137,
+        "title": "Оттаявший мир",
+        "status": {
+          "id": 2,
+          "enum": "Published"
+        },
+        "type": {
+          "id": 1,
+          "enum": "Film"
+        },
+        "tariff": {
+          "id": 4,
+          "enum": "PublicContent"
+        }
+      }
+    ],
+    "paginatorInfo": {
+      "currentPage": 1,
+      "perPage": 100,
+      "total": 4322,
+      "count": 100,
+      "lastPage": 44,
+      "hasMorePages": true,
+      "firstItem": 1,
+      "lastItem": 100
+    }
+  }
+}

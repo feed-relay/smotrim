@@ -58,7 +58,7 @@ type brandsVars struct {
 	Page  int `json:"page"`
 }
 
-type BrandsResult struct {
+type BrandsRaw struct {
 	Brands struct {
 		Data          []Brand        `json:"data,omitempty"`
 		PaginatorInfo *PaginatorInfo `json:"paginatorInfo,omitempty"`
@@ -66,15 +66,23 @@ type BrandsResult struct {
 }
 
 func (c *Client) Brands(ctx context.Context, limit, page int) ([]Brand, error) {
+	res, err := c.BrandsRaw(ctx, limit, page)
+	if err != nil {
+		return nil, err
+	}
+	return res.Brands.Data, nil
+}
+
+func (c *Client) BrandsRaw(ctx context.Context, limit, page int) (*BrandsRaw, error) {
 	vars, err := json.Marshal(brandsVars{First: limit, Page: page})
 	if err != nil {
 		return nil, fmt.Errorf("marshal variables: %w", err)
 	}
 
-	var res BrandsResult
+	var res BrandsRaw
 	err = c.Do(ctx, "Brands", brandsQuery, string(vars), &res)
 	if err != nil {
 		return nil, err
 	}
-	return res.Brands.Data, nil
+	return &res, nil
 }
