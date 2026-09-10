@@ -6,6 +6,9 @@ import (
 	"fmt"
 )
 
+// if brand.type == Radiobroadcast - episodesFilter()
+// TODO if brand.type == Podcast - brand.podcastMaterials()
+
 const brandEpisodesQuery = `query BrandEpisodes(
 	$brandId: Int!
 	$page: Int = 1
