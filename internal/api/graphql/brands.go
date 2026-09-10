@@ -65,8 +65,8 @@ type BrandsResult struct {
 	} `json:"brands,omitempty"`
 }
 
-func (c *Client) Brands(ctx context.Context) (*BrandsResult, error) {
-	vars, err := json.Marshal(brandsVars{First: 10, Page: 1})
+func (c *Client) Brands(ctx context.Context, limit, page int) (*BrandsResult, error) {
+	vars, err := json.Marshal(brandsVars{First: limit, Page: page})
 	if err != nil {
 		return nil, fmt.Errorf("marshal variables: %w", err)
 	}
