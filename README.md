@@ -18,7 +18,7 @@ The provider follows a simple pipeline to transform Smotrim data into an RSS fee
 
 To simplify managing a large number of shows, the provider includes a `SubsUpdater` service. This service:
 - Fetches all available brands from Smotrim.
-- Filters brands to include only those that are published, public, and categorized as `Radiobroadcast`.
+- Filters brands to include only those that are published, public, and categorized as `Radiobroadcast` or `Podcast`.
 - Groups the filtered brands by their respective channels.
 - Generates a `etc/subscriptions.smotrim.yml` file, which is used by the main provider to automatically configure subscriptions.
 

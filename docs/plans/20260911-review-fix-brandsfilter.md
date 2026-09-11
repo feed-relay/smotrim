@@ -63,6 +63,6 @@ Review the implementation of the brandsfilter feature, fix identified bugs and g
 
 ### Task 5: Update documentation
 
-- [ ] update README.md if user-facing changes
-- [ ] update CLAUDE.md if internal patterns changed
+- [x] update README.md if user-facing changes
+- [x] update CLAUDE.md if internal patterns changed
 ---
