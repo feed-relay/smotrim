@@ -40,7 +40,7 @@ func (p *FeedProvider) Feeds(ctx context.Context, subscriptions []contracts.Subs
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 
-	feeds := make(map[string]*rsscast.Feed)
+	rssFeeds := make(map[string]*rsscast.Feed)
 	var errs []error
 
 	// Limits the total number of concurrent requests to p.client,
@@ -65,7 +65,7 @@ func (p *FeedProvider) Feeds(ctx context.Context, subscriptions []contracts.Subs
 				}
 
 				mu.Lock()
-				feeds[slug] = feed
+				rssFeeds[slug] = feed
 				mu.Unlock()
 			}
 		}()
@@ -83,8 +83,8 @@ func (p *FeedProvider) Feeds(ctx context.Context, subscriptions []contracts.Subs
 		err = errors.Join(errs...)
 	}
 
-	if len(feeds) > 0 {
-		return feeds, err
+	if len(rssFeeds) > 0 {
+		return rssFeeds, err
 	}
 
 	return nil, err
