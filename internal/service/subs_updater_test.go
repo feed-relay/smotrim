@@ -322,3 +322,103 @@ func TestUpdateSubs_FileError(t *testing.T) {
 	require.Error(t, err)
 	assert.Contains(t, err.Error(), "save subscriptions: write subscriptions file")
 }
+
+func TestSortedChannelBrands(t *testing.T) {
+	channel1 := graphql.Channel{
+		ID:    1,
+		Title: "Радио России",
+	}
+
+	channel2 := graphql.Channel{
+		ID:    2,
+		Title: "Маяк",
+	}
+
+	brandsByChannels := map[int]channelBrands{
+		1: {
+			Channel: &channel1,
+			Brands: []graphql.Brand{
+				{ID: 2, Title: "Яблоко"},
+				{ID: 1, Title: "Альфа"},
+				{ID: 3, Title: "Бета"},
+			},
+		},
+		2: {
+			Channel: &channel2,
+			Brands: []graphql.Brand{
+				{ID: 5, Title: "Новости"},
+				{ID: 4, Title: "Вести"},
+			},
+		},
+	}
+
+	updater, _, _ := setup(t)
+	got := updater.sortedChannelBrands(brandsByChannels)
+
+	require.Len(t, got, 2)
+
+	require.Equal(t, "Маяк", got[0].Channel.Title)
+	require.Equal(t, []int{4, 5}, brandIDs(got[0].Brands))
+
+	require.Equal(t, "Радио России", got[1].Channel.Title)
+	require.Equal(t, []int{1, 3, 2}, brandIDs(got[1].Brands))
+}
+
+func TestSortedChannelBrands_Empty(t *testing.T) {
+	updater, _, _ := setup(t)
+	got := updater.sortedChannelBrands(nil)
+
+	require.Empty(t, got)
+}
+
+func TestSortedChannelBrands_DoesNotDependOnMapOrder(t *testing.T) {
+	channel1 := graphql.Channel{ID: 1, Title: "Б"}
+	channel2 := graphql.Channel{ID: 2, Title: "А"}
+
+	input := map[int]channelBrands{
+		1: {Channel: &channel1},
+		2: {Channel: &channel2},
+	}
+
+	updater, _, _ := setup(t)
+	got := updater.sortedChannelBrands(input)
+
+	require.Equal(t, "А", got[0].Channel.Title)
+	require.Equal(t, "Б", got[1].Channel.Title)
+}
+
+func TestSortedChannelBrands_DoesNotMutateInput(t *testing.T) {
+	channel := graphql.Channel{
+		ID:    1,
+		Title: "Радио России",
+	}
+
+	brands := []graphql.Brand{
+		{ID: 2, Title: "Яблоко"},
+		{ID: 1, Title: "Альфа"},
+	}
+
+	input := map[int]channelBrands{
+		channel.ID: {
+			Channel: &channel,
+			Brands:  brands,
+		},
+	}
+
+	updater, _, _ := setup(t)
+	got := updater.sortedChannelBrands(input)
+
+	require.Equal(t, []int{1, 2}, brandIDs(got[0].Brands))
+
+	require.Equal(t, []int{2, 1}, brandIDs(input[1].Brands))
+}
+
+func brandIDs(brands []graphql.Brand) []int {
+	result := make([]int, len(brands))
+
+	for i, brand := range brands {
+		result[i] = brand.ID
+	}
+
+	return result
+}

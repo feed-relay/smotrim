@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"slices"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -204,7 +206,7 @@ func (s *SubsUpdater) saveSubscriptions(filename string, brandsByChannels map[in
 
 	stringBuilder.WriteString("subscriptions:\n")
 
-	for _, cb := range brandsByChannels {
+	for _, cb := range s.sortedChannelBrands(brandsByChannels) {
 		bb := cb.Brands
 		if len(bb) == 0 {
 			continue
@@ -231,4 +233,30 @@ func (s *SubsUpdater) saveSubscriptions(filename string, brandsByChannels map[in
 		return fmt.Errorf("write subscriptions file: %w", err)
 	}
 	return nil
+}
+
+// sortedChannelBrands sorts src by channel title and brand title
+func (s *SubsUpdater) sortedChannelBrands(src map[int]channelBrands) []channelBrands {
+	result := make([]channelBrands, 0, len(src))
+
+	for _, cb := range src {
+		brands := slices.Clone(cb.Brands)
+
+		sort.Slice(brands, func(i, j int) bool {
+			return strings.ToLower(brands[i].Title) <
+				strings.ToLower(brands[j].Title)
+		})
+
+		result = append(result, channelBrands{
+			Channel: cb.Channel,
+			Brands:  brands,
+		})
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		return strings.ToLower(result[i].Channel.Title) <
+			strings.ToLower(result[j].Channel.Title)
+	})
+
+	return result
 }
