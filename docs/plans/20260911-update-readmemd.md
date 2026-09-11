@@ -32,10 +32,10 @@ Update the README.md to document the new subscription management functionality, 
 **Files:**
 - Modify: `README.md`
 
-- [ ] Add a subsection "Updating Subscriptions".
-- [ ] Document the command: `go run cmd/update-subs/main.go`.
-- [ ] Document the available flags: `-config` (Path to the YAML config file, defaults to `etc/config.yml`) and `-prod` (Use production data instead of test data).
-- [ ] Verify the command and flags are correct by checking `cmd/update-subs/main.go`.
+- [x] Add a subsection "Updating Subscriptions".
+- [x] Document the command: `go run cmd/update-subs/main.go`.
+- [x] Document the available flags: `-config` (Path to the YAML config file, defaults to `etc/config.yml`) and `-prod` (Use production data instead of test data).
+- [x] Verify the command and flags are correct by checking `cmd/update-subs/main.go`.
 
 ### Task 3: Update Configuration section
 

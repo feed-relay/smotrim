@@ -52,6 +52,18 @@ You can also specify the XML output directory using the `-out` flag:
 go run cmd/example/main.go -out /path/to/output
 ```
 
+#### Updating Subscriptions
+
+To automatically update the list of available subscriptions, run the `update-subs` utility:
+
+```bash
+go run cmd/update-subs/main.go
+```
+
+Available flags:
+- `-config`: Path to the YAML config file (defaults to `etc/config.yml`).
+- `-prod`: Use production data instead of test data.
+
 ### Configuration
 
 The application is configured via a YAML file. Key configuration fields include:
