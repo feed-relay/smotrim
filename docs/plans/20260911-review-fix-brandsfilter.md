@@ -50,10 +50,10 @@ Review the implementation of the brandsfilter feature, fix identified bugs and g
 **Files:**
 - Modify: `internal/api/graphql/brand_test.go`
 
-- [ ] implement tests for Client.Brands and Client.BrandsRaw
-- [ ] verify correct request construction (query and variables)
-- [ ] verify correct response decoding
-- [ ] run project test suite - must pass before task 4
+- [x] implement tests for Client.Brands and Client.BrandsRaw
+- [x] verify correct request construction (query and variables)
+- [x] verify correct response decoding
+- [x] run project test suite - must pass before task 4
 
 ### Task 4: Verify acceptance criteria
 
