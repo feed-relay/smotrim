@@ -6,7 +6,6 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -201,7 +200,7 @@ func TestClient_Audio_DoRequestError(t *testing.T) {
 
 	require.Error(t, err)
 	assert.Nil(t, audio)
-	assert.True(t, strings.Contains(err.Error(), "do request"))
+	assert.Contains(t, err.Error(), "do request")
 }
 
 func TestClient_baseURL_DefaultsAndOverrides(t *testing.T) {

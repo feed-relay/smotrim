@@ -17,6 +17,9 @@ type Brand struct {
 	ID          int        `json:"id,omitempty"`
 	Title       string     `json:"title,omitempty"`
 	Description string     `json:"description,omitempty"`
+	Status      *Status    `json:"status,omitempty"`
+	Type        *Type      `json:"type,omitempty"`
+	Tariff      *Tariff    `json:"tariff,omitempty"`
 	Channels    []Channel  `json:"channels,omitempty"`
 	Genres      []Genre    `json:"genres,omitempty"`
 	Subgenres   []Subgenre `json:"subgenres,omitempty"`
@@ -45,11 +48,9 @@ type ImagePreset struct {
 }
 
 type Episode struct {
-	ID        int    `json:"id,omitempty"`
-	CreatedAt string `json:"createdAt,omitempty"`
-	Status    struct {
-		Enum string `json:"enum,omitempty"`
-	} `json:"status,omitempty"`
+	ID              int          `json:"id,omitempty"`
+	CreatedAt       string       `json:"createdAt,omitempty"`
+	Status          *Status      `json:"status,omitempty"`
 	Title           string       `json:"title,omitempty"`
 	Description     string       `json:"description,omitempty"`
 	AirDate         *SmotrimTime `json:"airDate,omitempty"`
@@ -69,9 +70,37 @@ type Season struct {
 	Number int `json:"number,omitempty"`
 }
 
+type Status struct {
+	ID   int    `json:"id,omitempty"`
+	Enum string `json:"enum,omitempty"`
+}
+
+type Type struct {
+	ID   int    `json:"id,omitempty"`
+	Enum string `json:"enum,omitempty"`
+	Code string `json:"code,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+type Tariff struct {
+	ID   int    `json:"id,omitempty"`
+	Enum string `json:"enum,omitempty"`
+}
+
 type BrandEpisodes struct {
 	Brand    *Brand
 	Episodes []*Episode
+}
+
+type PaginatorInfo struct {
+	CurrentPage  int  `json:"currentPage,omitempty"`
+	PerPage      int  `json:"perPage,omitempty"`
+	Total        int  `json:"total,omitempty"`
+	Count        int  `json:"count,omitempty"`
+	LastPage     int  `json:"lastPage,omitempty"`
+	HasMorePages bool `json:"hasMorePages,omitempty"`
+	FirstItem    int  `json:"firstItem,omitempty"`
+	LastItem     int  `json:"lastItem,omitempty"`
 }
 
 func (t *SmotrimTime) UnmarshalJSON(data []byte) error {

@@ -25,6 +25,19 @@ func (c *TestdataClient) ChannelBySlug(ctx context.Context, slug string) (*Chann
 	return &res, err
 }
 
+func (c *TestdataClient) Brands(ctx context.Context, limit, page int) ([]Brand, error) {
+	// res, err := c.BrandsRaw(ctx, limit, page)
+	var res BrandsRaw
+	err := c.do("testdata/brands.json", &res)
+	return res.Brands.Data, err
+}
+
+func (c *TestdataClient) BrandsRaw(ctx context.Context, limit, page int) (*BrandsRaw, error) {
+	var res BrandsRaw
+	err := c.do("testdata/brands_raw.json", &res)
+	return &res, err
+}
+
 func (c *TestdataClient) Brand(ctx context.Context, id int) (*Brand, error) {
 	var res Brand
 	err := c.do("testdata/brand.json", &res)

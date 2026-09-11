@@ -57,7 +57,7 @@ func TestXmlFileWriter_Write(t *testing.T) {
 	t.Run("invalid directory", func(t *testing.T) {
 		// Create a file where the directory should be to cause MkdirAll failure
 		blockedDir := filepath.Join(tmpDir, "blocked")
-		err := os.WriteFile(blockedDir, []byte("not a dir"), 0644)
+		err := os.WriteFile(blockedDir, []byte("not a dir"), 0o600)
 		require.NoError(t, err)
 
 		slug := "blocked/test-feed"

@@ -14,6 +14,14 @@ The provider follows a simple pipeline to transform Smotrim data into an RSS fee
 4. **FileSizer**: A utility to resolve the actual byte size of remote media files, which is required for high-quality RSS feeds.
 5. **XmlFileWriter**: The final stage of the pipeline, which persists the generated RSS feed to the local filesystem.
 
+### Subscription Management
+
+To simplify managing a large number of shows, the provider includes a `SubsUpdater` service. This service:
+- Fetches all available brands from Smotrim.
+- Filters brands to include only those that are published, public, and categorized as `Radiobroadcast` or `Podcast`.
+- Groups the filtered brands by their respective channels.
+- Generates a `etc/subscriptions.smotrim.yml` file, which is used by the main provider to automatically configure subscriptions.
+
 The pipeline includes built-in feed validation to ensure the output is compliant with the RSS specification and gracefully handles missing audio streams to maintain feed stability.
 
 ## Development Guide
@@ -44,6 +52,18 @@ You can also specify the XML output directory using the `-out` flag:
 go run cmd/example/main.go -out /path/to/output
 ```
 
+#### Updating Subscriptions
+
+To automatically update the list of available subscriptions, run the `update-subs` utility:
+
+```bash
+go run cmd/update-subs/main.go
+```
+
+Available flags:
+- `-config`: Path to the YAML config file (defaults to `etc/config.yml`).
+- `-prod`: Use production data instead of test data.
+
 ### Configuration
 
 The application is configured via a YAML file. Key configuration fields include:
@@ -52,7 +72,7 @@ The application is configured via a YAML file. Key configuration fields include:
 - `itunes_owner_name`: The name of the feed owner, used in the Apple Podcasts metadata.
 - `itunes_owner_email`: The email of the feed owner, used in the Apple Podcasts metadata.
 - `generator`: A string describing the tool that generated the feed.
-- `subscriptions`: A list of subscription configurations. Each subscription consists of:
+- `subscriptions`: A list of subscription configurations. This can be automatically generated via the `update-subs` utility (which produces `etc/subscriptions.smotrim.yml`). Each subscription consists of:
     - `limit`: The maximum number of episodes to include in the feed for this subscription.
     - `shows`: A list of Smotrim show IDs to include in the feed.
 

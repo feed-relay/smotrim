@@ -16,6 +16,7 @@ type api interface {
 
 type gql interface {
 	BrandEpisodes(ctx context.Context, id int, limit int) (*graphql.BrandEpisodes, error)
+	BrandsRaw(ctx context.Context, limit, page int) (*graphql.BrandsRaw, error)
 }
 
 type Client struct {
@@ -41,6 +42,10 @@ func NewTestdataClient() *Client {
 		api: &testdataApiClient{},
 		gql: &graphql.TestdataClient{},
 	}
+}
+
+func (c *Client) BrandsRaw(ctx context.Context, limit, page int) (*graphql.BrandsRaw, error) {
+	return c.gql.BrandsRaw(ctx, limit, page)
 }
 
 func (c *Client) BrandEpisodes(ctx context.Context, id, limit int) (*graphql.BrandEpisodes, error) {
