@@ -21,9 +21,9 @@ type feedsTask struct {
 	subscription Sub
 }
 
-func (p *FeedProvider) Feeds(ctx context.Context, subscriptions []contracts.Subscription) (map[string]*rsscast.Feed, error) {
+func (p *FeedProvider) Feeds(ctx context.Context, feeds []contracts.Subscription) (map[string]*rsscast.Feed, error) {
 	var allTasks []feedTask
-	for _, subscription := range subscriptions {
+	for _, subscription := range feeds {
 		if len(subscription.Shows()) == 0 {
 			continue
 		}
