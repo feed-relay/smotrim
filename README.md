@@ -20,7 +20,7 @@ To simplify managing a large number of shows, the provider includes a `SubsUpdat
 - Fetches all available brands from Smotrim.
 - Filters brands to include only those that are published, public, and categorized as `Radiobroadcast`.
 - Groups the filtered brands by their respective channels.
-- Generates a `etc/subscriptions.smotrim.yml` file, which is used by the main provider to automatically configure subscriptions., which persists the generated RSS feed to the local filesystem.
+- Generates a `etc/subscriptions.smotrim.yml` file, which is used by the main provider to automatically configure subscriptions.
 
 The pipeline includes built-in feed validation to ensure the output is compliant with the RSS specification and gracefully handles missing audio streams to maintain feed stability.
 

@@ -48,9 +48,9 @@ Update the README.md to document the new subscription management functionality, 
 
 ### Task 4: Verify acceptance criteria
 
-- [ ] verify README is logically structured and contains all new functionality
-- [ ] verify all documented commands work as described
-- [ ] verify formatting is consistent
+- [x] verify README is logically structured and contains all new functionality
+- [x] verify all documented commands work as described
+- [x] verify formatting is consistent
 
 ### Task 5: Update documentation
 
