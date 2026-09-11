@@ -3,7 +3,6 @@ package graphql
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -23,34 +22,34 @@ func TestClient_BrandEpisodes_Success(t *testing.T) {
 		capturedBody = b
 
 		_, _ = w.Write([]byte(`{
-			"data": {
-				"brand": {
-					"id": 10,
-					"title": "Brand Title",
-					"description": "Brand description",
-					"channels": [{"id": 1, "title": "Channel One", "slug": "channel-one"}],
-					"genres": [{"id": 2, "name": "Drama"}],
-					"subgenres": [{"id": 3, "name": "Melodrama"}],
-					"images": [{"id": 4, "linkType": "Poster", "presets": [{"name": "Small", "link": "https://example.com/poster.jpg"}]}]
-				},
-				"episodesFilter": {
-					"data": [
-						{
-							"id": 100,
-							"title": "Episode One",
-							"number": 1,
-							"season": {"number": 1},
-							"description": "Episode description",
-							"createdAt": "2020-01-01T00:00:00Z",
-							"airDate": "2020-01-02T00:00:00Z",
-							"publicationDate": "2020-01-03T00:00:00Z",
-							"audio": {"duration": 1800, "publicId": 555},
-							"images": [{"id": 5, "linkType": "SplashScreen", "presets": [{"name": "Small", "link": "https://example.com/splash.jpg"}]}]
-						}
-					]
+				"data": {
+					"brand": {
+						"id": 10,
+						"title": "Brand Title",
+						"description": "Brand description",
+						"channels": [{"id": 1, "title": "Channel One", "slug": "channel-one"}],
+						"genres": [{"id": 2, "name": "Drama"}],
+						"subgenres": [{"id": 3, "name": "Melodrama"}],
+						"images": [{"id": 4, "linkType": "Poster", "presets": [{"name": "Small", "link": "https://example.com/poster.jpg"}]}]
+					},
+					"episodesFilter": {
+						"data": [
+							{
+								"id": 100,
+								"title": "Episode One",
+								"number": 1,
+								"season": {"number": 1},
+								"description": "Episode description",
+								"createdAt": "2020-01-01T00:00:00Z",
+								"airDate": "2020-01-02T00:00:00Z",
+								"publicationDate": "2020-01-03T00:00:00Z",
+								"audio": {"duration": 1800, "publicId": 555},
+								"images": [{"id": 5, "linkType": "SplashScreen", "presets": [{"name": "Small", "link": "https://example.com/splash.jpg"}]}]
+							}
+						]
+					}
 				}
-			}
-		}`))
+			}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -109,11 +108,11 @@ func TestClient_BrandEpisodes_Success(t *testing.T) {
 func TestClient_BrandEpisodes_EmptyEpisodeList(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte(`{
-			"data": {
-				"brand": {"id": 10, "title": "Brand Title"},
-				"episodesFilter": {"data": []}
-			}
-		}`))
+				"data": {
+					"brand": {"id": 10, "title": "Brand Title"},
+					"episodesFilter": {"data": []}
+				}
+			}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -129,11 +128,11 @@ func TestClient_BrandEpisodes_EmptyEpisodeList(t *testing.T) {
 func TestClient_BrandEpisodes_BrandIsNull(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		_, _ = w.Write([]byte(`{
-			"data": {
-				"brand": null,
-				"episodesFilter": {"data": []}
-			}
-		}`))
+				"data": {
+					"brand": null,
+					"episodesFilter": {"data": []}
+				}
+			}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -158,7 +157,7 @@ func TestClient_BrandEpisodes_PropagatesGraphQLError(t *testing.T) {
 	assert.Nil(t, got)
 
 	var gqlErr *Error
-	require.True(t, errors.As(err, &gqlErr))
+	require.ErrorAs(t, err, &gqlErr)
 	assert.Equal(t, []string{"brand not found"}, gqlErr.Messages)
 }
 

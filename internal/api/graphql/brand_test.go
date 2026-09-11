@@ -3,7 +3,6 @@ package graphql
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -26,22 +25,22 @@ func TestClient_Brand_Success(t *testing.T) {
 		capturedBody = b
 
 		_, _ = w.Write([]byte(`{
-				"data": {
-					"brand": {
-						"id": 55,
-						"title": "Brand Title",
-						"description": "Brand description",
-						"channels": [{"id": 1, "title": "Channel One", "slug": "channel-one"}],
-						"images": [{
-							"id": 4,
-							"linkType": "Poster",
-							"presets": [{"name": "Small", "link": "https://example.com/poster.jpg"}]
-						}],
-						"genres": [{"id": 2, "name": "Drama"}],
-						"subgenres": [{"id": 3, "name": "Melodrama"}]
+					"data": {
+						"brand": {
+							"id": 55,
+							"title": "Brand Title",
+							"description": "Brand description",
+							"channels": [{"id": 1, "title": "Channel One", "slug": "channel-one"}],
+							"images": [{
+								"id": 4,
+								"linkType": "Poster",
+								"presets": [{"name": "Small", "link": "https://example.com/poster.jpg"}]
+							}],
+							"genres": [{"id": 2, "name": "Drama"}],
+							"subgenres": [{"id": 3, "name": "Melodrama"}]
+						}
 					}
-				}
-			}`))
+				}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -96,7 +95,7 @@ func TestClient_Brand_PropagatesGraphQLError(t *testing.T) {
 	assert.Nil(t, got)
 
 	var gqlErr *Error
-	require.True(t, errors.As(err, &gqlErr))
+	require.ErrorAs(t, err, &gqlErr)
 	assert.Equal(t, []string{"brand not found"}, gqlErr.Messages)
 }
 
@@ -167,39 +166,39 @@ func TestClient_Brands_Success(t *testing.T) {
 		capturedBody = b
 
 		_, _ = w.Write([]byte(`{
-				"data": {
-					"brands": {
-						"data": [
-							{
-								"id": 1,
-								"title": "Brand 1",
-								"status": {"id": 10, "enum": "ACTIVE"},
-								"type": {"id": 20, "enum": "PODCAST"},
-								"tariff": {"id": 30, "enum": "FREE"},
-								"channels": [{"id": 100, "title": "Channel 100", "slug": "channel-100"}]
-							},
-							{
-								"id": 2,
-								"title": "Brand 2",
-								"status": {"id": 10, "enum": "ACTIVE"},
-								"type": {"id": 21, "enum": "TV"},
-								"tariff": {"id": 31, "enum": "PAID"},
-								"channels": [{"id": 101, "title": "Channel 101", "slug": "channel-101"}]
+					"data": {
+						"brands": {
+							"data": [
+								{
+									"id": 1,
+									"title": "Brand 1",
+									"status": {"id": 10, "enum": "ACTIVE"},
+									"type": {"id": 20, "enum": "PODCAST"},
+									"tariff": {"id": 30, "enum": "FREE"},
+									"channels": [{"id": 100, "title": "Channel 100", "slug": "channel-100"}]
+								},
+								{
+									"id": 2,
+									"title": "Brand 2",
+									"status": {"id": 10, "enum": "ACTIVE"},
+									"type": {"id": 21, "enum": "TV"},
+									"tariff": {"id": 31, "enum": "PAID"},
+									"channels": [{"id": 101, "title": "Channel 101", "slug": "channel-101"}]
+								}
+							],
+							"paginatorInfo": {
+								"currentPage": 1,
+								"lastPage": 1,
+								"hasMorePages": false,
+								"lastItem": 2,
+								"total": 2,
+								"count": 2,
+								"perPage": 10,
+								"firstItem": 1
 							}
-						],
-						"paginatorInfo": {
-							"currentPage": 1,
-							"lastPage": 1,
-							"hasMorePages": false,
-							"lastItem": 2,
-							"total": 2,
-							"count": 2,
-							"perPage": 10,
-							"firstItem": 1
 						}
 					}
-				}
-			}`))
+				}`))
 	}))
 	t.Cleanup(srv.Close)
 
@@ -242,7 +241,7 @@ func TestClient_Brands_PropagatesGraphQLError(t *testing.T) {
 	assert.Nil(t, got)
 
 	var gqlErr *Error
-	require.True(t, errors.As(err, &gqlErr))
+	require.ErrorAs(t, err, &gqlErr)
 	assert.Equal(t, []string{"brands not found"}, gqlErr.Messages)
 }
 

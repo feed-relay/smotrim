@@ -62,7 +62,7 @@ type BrandsRaw struct {
 	Brands struct {
 		Data          []Brand        `json:"data,omitempty"`
 		PaginatorInfo *PaginatorInfo `json:"paginatorInfo,omitempty"`
-	} `json:"brands,omitempty"`
+	} `json:"brands"`
 }
 
 func (c *Client) Brands(ctx context.Context, limit, page int) ([]Brand, error) {

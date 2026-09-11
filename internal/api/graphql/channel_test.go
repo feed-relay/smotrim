@@ -3,7 +3,6 @@ package graphql
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -62,7 +61,7 @@ func TestClient_Channel_PropagatesGraphQLError(t *testing.T) {
 	assert.Nil(t, got)
 
 	var gqlErr *Error
-	require.True(t, errors.As(err, &gqlErr))
+	require.ErrorAs(t, err, &gqlErr)
 	assert.Equal(t, []string{"channel not found"}, gqlErr.Messages)
 }
 
@@ -128,7 +127,7 @@ func TestClient_ChannelBySlug_PropagatesGraphQLError(t *testing.T) {
 	assert.Nil(t, got)
 
 	var gqlErr *Error
-	require.True(t, errors.As(err, &gqlErr))
+	require.ErrorAs(t, err, &gqlErr)
 	assert.Equal(t, []string{"slug not found"}, gqlErr.Messages)
 }
 

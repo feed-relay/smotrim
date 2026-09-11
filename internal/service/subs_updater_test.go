@@ -145,7 +145,7 @@ func TestUpdateSubs_CacheHit(t *testing.T) {
 		Brands:    brands,
 	}
 	data, _ := json.Marshal(cache)
-	err := os.WriteFile(updater.cacheFile, data, 0644)
+	err := os.WriteFile(updater.cacheFile, data, 0o600)
 	require.NoError(t, err)
 
 	err = updater.UpdateSubs(ctx)
@@ -220,7 +220,7 @@ func TestUpdateSubs_CacheExpired(t *testing.T) {
 		Brands:    brands,
 	}
 	data, _ := json.Marshal(cache)
-	err := os.WriteFile(updater.cacheFile, data, 0644)
+	err := os.WriteFile(updater.cacheFile, data, 0o600)
 	require.NoError(t, err)
 
 	clientMock.BrandsRawFunc = func(ctx context.Context, limit, page int) (*graphql.BrandsRaw, error) {

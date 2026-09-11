@@ -57,9 +57,9 @@ Review the implementation of the brandsfilter feature, fix identified bugs and g
 
 ### Task 4: Verify acceptance criteria
 
-- [ ] run make test (race + coverage)
-- [ ] run make lint
-- [ ] verify test coverage meets 80%+
+- [x] run make test (race + coverage)
+- [x] run make lint
+- [x] verify test coverage meets 80%+
 
 ### Task 5: Update documentation
 

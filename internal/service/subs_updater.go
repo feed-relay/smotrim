@@ -18,11 +18,18 @@ import (
 //go:generate moq --out ./mocks/config_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . Config
 //go:generate moq --out ./mocks/client_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . Client
 
-const cacheTTL = 7 * 24 * time.Hour
+const (
+	cacheTTL = 7 * 24 * time.Hour
 
-const cacheFile = "var/cache/brands.json"
+	cacheFile = "var/cache/brands.json"
 
-const subscriptionsFile = "etc/subscriptions.smotrim.yml"
+	subscriptionsFile = "etc/subscriptions.smotrim.yml"
+
+	brandTypeRadiobroadcast = "Radiobroadcast"
+	brandTypePodcast       = "Podcast"
+	brandStatusPublished   = "Published"
+	brandTariffPublic      = "PublicContent"
+)
 
 type Config interface {
 	TestData() bool
@@ -71,16 +78,16 @@ func (s *SubsUpdater) UpdateSubs(ctx context.Context) error {
 
 	brandsByChannels := make(map[int]channelBrands)
 	for _, b := range all {
-		if b.Type.Enum != "Radiobroadcast" && b.Type.Enum != "Podcast" {
+		if b.Type.Enum != brandTypeRadiobroadcast && b.Type.Enum != brandTypePodcast {
 			continue
 		}
-		if b.Status.Enum != "Published" {
+		if b.Status.Enum != brandStatusPublished {
 			continue
 		}
-		if b.Tariff.Enum != "PublicContent" {
+		if b.Tariff.Enum != brandTariffPublic {
 			continue
 		}
-		if b.Channels == nil || len(b.Channels) == 0 {
+		if len(b.Channels) == 0 {
 			continue
 		}
 
@@ -181,10 +188,10 @@ func (s *SubsUpdater) saveBrandsCache(filename string, brands []graphql.Brand) e
 	}
 
 	dir := filepath.Dir(filename)
-	if err := os.MkdirAll(dir, 0o755); err != nil {
+	if err := os.MkdirAll(dir, 0o750); err != nil {
 		return fmt.Errorf("mkdir cache dir: %w", err)
 	}
-	if err := os.WriteFile(filename, data, 0o644); err != nil {
+	if err := os.WriteFile(filename, data, 0o600); err != nil {
 		return fmt.Errorf("write cache file: %w", err)
 	}
 	return nil
@@ -218,7 +225,7 @@ func (s *SubsUpdater) saveSubscriptions(filename string, brandsByChannels map[in
 		stringBuilder.WriteString("\n")
 	}
 
-	if err := os.WriteFile(filename, []byte(stringBuilder.String()), 0644); err != nil {
+	if err := os.WriteFile(filename, []byte(stringBuilder.String()), 0o600); err != nil {
 		return fmt.Errorf("write subscriptions file: %w", err)
 	}
 	return nil
