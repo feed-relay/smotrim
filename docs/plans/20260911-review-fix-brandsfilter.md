@@ -37,13 +37,13 @@ Review the implementation of the brandsfilter feature, fix identified bugs and g
 - Modify: `internal/service/subs_updater.go`
 - Create: `internal/service/subs_updater_test.go`
 
-- [ ] run make generate to create necessary mocks
-- [ ] implement tests for UpdateSubs covering:
+- [x] run make generate to create necessary mocks
+- [x] implement tests for UpdateSubs covering:
     - cache hit and miss scenarios
     - API error handling
     - correct filtering of brands by type, status, and tariff
     - correct generation of subscriptions file
-- [ ] run project test suite - must pass before task 3
+- [x] run project test suite - must pass before task 3
 
 ### Task 3: Implement tests for GraphQL Brands API
 

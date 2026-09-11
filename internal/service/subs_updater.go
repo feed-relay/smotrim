@@ -44,7 +44,9 @@ type channelBrands struct {
 }
 
 type SubsUpdater struct {
-	client Client
+	client            Client
+	cacheFile         string
+	subscriptionsFile string
 }
 
 func NewSubsUpdater(config Config) *SubsUpdater {
@@ -55,7 +57,9 @@ func NewSubsUpdater(config Config) *SubsUpdater {
 		client = api.NewClient(config.HTTPTimeout())
 	}
 	return &SubsUpdater{
-		client: client,
+		client:            client,
+		cacheFile:         cacheFile,
+		subscriptionsFile: subscriptionsFile,
 	}
 }
 
@@ -88,7 +92,7 @@ func (s *SubsUpdater) UpdateSubs(ctx context.Context) error {
 		}
 	}
 
-	err = s.saveSubscriptions(subscriptionsFile, brandsByChannels, 10)
+	err = s.saveSubscriptions(s.subscriptionsFile, brandsByChannels, 10)
 	if err != nil {
 		return fmt.Errorf("save subscriptions: %w", err)
 	}
@@ -97,7 +101,7 @@ func (s *SubsUpdater) UpdateSubs(ctx context.Context) error {
 }
 
 func (s *SubsUpdater) getAllBrands(ctx context.Context) ([]graphql.Brand, error) {
-	brands, ok, err := s.loadBrandsCache(cacheFile)
+	brands, ok, err := s.loadBrandsCache(s.cacheFile)
 	if err != nil {
 		return nil, fmt.Errorf("load brands cache: %w", err)
 	}
@@ -110,7 +114,7 @@ func (s *SubsUpdater) getAllBrands(ctx context.Context) ([]graphql.Brand, error)
 		return nil, fmt.Errorf("all brands: %w", err)
 	}
 
-	if err = s.saveBrandsCache(cacheFile, brands); err != nil {
+	if err = s.saveBrandsCache(s.cacheFile, brands); err != nil {
 		return nil, fmt.Errorf("save brands cache: %w", err)
 	}
 
