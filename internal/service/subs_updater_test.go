@@ -10,10 +10,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/feed-relay/smotrim/internal/api/graphql"
-	"github.com/feed-relay/smotrim/internal/service/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
+
+	"github.com/feed-relay/smotrim/internal/api/graphql"
+	"github.com/feed-relay/smotrim/internal/service/mocks"
 )
 
 func setup(t *testing.T) (*SubsUpdater, *mocks.ClientMock, string) {
@@ -77,11 +78,11 @@ func TestUpdateSubs_Success(t *testing.T) {
 			},
 		},
 		{
-			ID:     5,
-			Title:  "Brand 5 (No Channels)",
-			Type:   &graphql.Type{Enum: "Radiobroadcast"},
-			Status: &graphql.Status{Enum: "Published"},
-			Tariff: &graphql.Tariff{Enum: "PublicContent"},
+			ID:       5,
+			Title:    "Brand 5 (No Channels)",
+			Type:     &graphql.Type{Enum: "Radiobroadcast"},
+			Status:   &graphql.Status{Enum: "Published"},
+			Tariff:   &graphql.Tariff{Enum: "PublicContent"},
 			Channels: nil,
 		},
 		{
@@ -264,7 +265,7 @@ func TestAllBrands_Pagination(t *testing.T) {
 			res.Brands.Data = page1
 			res.Brands.PaginatorInfo = &graphql.PaginatorInfo{
 				HasMorePages: true,
-				LastPage:      2,
+				LastPage:     2,
 			}
 			return res, nil
 		}
@@ -272,7 +273,7 @@ func TestAllBrands_Pagination(t *testing.T) {
 			res.Brands.Data = page2
 			res.Brands.PaginatorInfo = &graphql.PaginatorInfo{
 				HasMorePages: false,
-				LastPage:      2,
+				LastPage:     2,
 			}
 			return res, nil
 		}

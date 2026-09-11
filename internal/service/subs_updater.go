@@ -26,9 +26,9 @@ const (
 	subscriptionsFile = "etc/subscriptions.smotrim.yml"
 
 	brandTypeRadiobroadcast = "Radiobroadcast"
-	brandTypePodcast       = "Podcast"
-	brandStatusPublished   = "Published"
-	brandTariffPublic      = "PublicContent"
+	brandTypePodcast        = "Podcast"
+	brandStatusPublished    = "Published"
+	brandTariffPublic       = "PublicContent"
 )
 
 type Config interface {
@@ -78,7 +78,8 @@ func (s *SubsUpdater) UpdateSubs(ctx context.Context) error {
 
 	brandsByChannels := make(map[int]channelBrands)
 	for _, b := range all {
-		if b.Type.Enum != brandTypeRadiobroadcast && b.Type.Enum != brandTypePodcast {
+		// TODO if b.Type.Enum != brandTypeRadiobroadcast && b.Type.Enum != brandTypePodcast {
+		if b.Type.Enum != brandTypeRadiobroadcast {
 			continue
 		}
 		if b.Status.Enum != brandStatusPublished {
@@ -136,6 +137,7 @@ func (s *SubsUpdater) allBrands(ctx context.Context) ([]graphql.Brand, error) {
 	for page := 1; ; page++ {
 		result, err := s.client.BrandsRaw(ctx, limit, page)
 		if err != nil {
+			// all or nothing
 			return nil, fmt.Errorf("get brands page %d: %w", page, err)
 		}
 
