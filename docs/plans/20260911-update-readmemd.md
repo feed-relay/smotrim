@@ -54,6 +54,6 @@ Update the README.md to document the new subscription management functionality, 
 
 ### Task 5: Update documentation
 
-- [ ] update README.md if user-facing changes
-- [ ] update CLAUDE.md if internal patterns changed
+- [x] update README.md if user-facing changes
+- [x] update CLAUDE.md if internal patterns changed
 ---
