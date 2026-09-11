@@ -72,7 +72,7 @@ The application is configured via a YAML file. Key configuration fields include:
 - `itunes_owner_name`: The name of the feed owner, used in the Apple Podcasts metadata.
 - `itunes_owner_email`: The email of the feed owner, used in the Apple Podcasts metadata.
 - `generator`: A string describing the tool that generated the feed.
-- `subscriptions`: A list of subscription configurations. Each subscription consists of:
+- `subscriptions`: A list of subscription configurations. This can be automatically generated via the `update-subs` utility (which produces `etc/subscriptions.smotrim.yml`). Each subscription consists of:
     - `limit`: The maximum number of episodes to include in the feed for this subscription.
     - `shows`: A list of Smotrim show IDs to include in the feed.
 

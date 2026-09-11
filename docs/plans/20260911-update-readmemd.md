@@ -42,9 +42,9 @@ Update the README.md to document the new subscription management functionality, 
 **Files:**
 - Modify: `README.md`
 
-- [ ] Modify the description of the `subscriptions` field to mention that it can be automatically generated via the `update-subs` utility.
-- [ ] Reference the generated file `etc/subscriptions.smotrim.yml`.
-- [ ] Verify the reference is correct.
+- [x] Modify the description of the `subscriptions` field to mention that it can be automatically generated via the `update-subs` utility.
+- [x] Reference the generated file `etc/subscriptions.smotrim.yml`.
+- [x] Verify the reference is correct.
 
 ### Task 4: Verify acceptance criteria
 
