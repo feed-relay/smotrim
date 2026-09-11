@@ -11,12 +11,23 @@ import (
 
 type FeedProvider struct{}
 
+type feed interface {
+	Limit() int
+	Shows() []string
+	Slug() string
+}
+
+type feedsTask struct {
+	subscription Sub
+}
+
 func (p *FeedProvider) Feeds(ctx context.Context, subscriptions []contracts.Subscription) (map[string]*rsscast.Feed, error) {
 	var allTasks []feedTask
 	for _, subscription := range subscriptions {
-		for _, show := range subscription.Shows() {
-			allTasks = append(allTasks, feedTask{subscription: subscription, show: show})
+		if len(subscription.Shows()) == 0 {
+			continue
 		}
+		allTasks = append(allTasks, feedTask{subscription: subscription})
 	}
 
 	workers := min(feedWorkers, len(allTasks))
@@ -43,11 +54,13 @@ func (p *FeedProvider) Feeds(ctx context.Context, subscriptions []contracts.Subs
 			defer wg.Done()
 
 			for task := range tasks {
-				slug, feed, err := p.feed(ctx, task.subscription, task.show, requests)
+				slug, feed, err := p.feed(ctx, task.subscription, requests)
 				if err != nil {
 					mu.Lock()
 					errs = append(errs, err)
 					mu.Unlock()
+				}
+				if feed == nil {
 					continue
 				}
 
@@ -71,14 +84,12 @@ func (p *FeedProvider) Feeds(ctx context.Context, subscriptions []contracts.Subs
 	}
 
 	if len(feeds) > 0 {
-		// Return whatever succeeded alongside any errors, rather than
-		// silently discarding the errors just because some shows worked.
 		return feeds, err
 	}
 
 	return nil, err
 }
 
-func (p *FeedProvider) feed(ctx context.Context, subscription Sub, show string, requests chan struct{}) (string, *rsscast.Feed, error) {
+func (p *FeedProvider) feed(ctx context.Context, subscription Sub, requests chan struct{}) (string, *rsscast.Feed, error) {
 	return "", nil, nil
 }
