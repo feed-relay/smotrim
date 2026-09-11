@@ -120,8 +120,10 @@ func TestUpdateSubs_Success(t *testing.T) {
 	assert.NotContains(t, res, `"3"`)
 	assert.NotContains(t, res, `"4"`)
 	assert.NotContains(t, res, `"5"`)
-	assert.Contains(t, res, "# Channel 20")
-	assert.Contains(t, res, `"6" # Brand 6`)
+
+	// type Podcast
+	assert.NotContains(t, res, "# Channel 20")
+	assert.NotContains(t, res, `"6" # Brand 6`)
 }
 
 func TestUpdateSubs_CacheHit(t *testing.T) {
