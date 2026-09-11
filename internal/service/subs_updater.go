@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -63,13 +62,12 @@ func NewSubsUpdater(config Config) *SubsUpdater {
 func (s *SubsUpdater) UpdateSubs(ctx context.Context) error {
 	all, err := s.getAllBrands(ctx)
 	if err != nil {
-		return err
+		return fmt.Errorf("get all brands: %w", err)
 	}
 
 	brandsByChannels := make(map[int]channelBrands)
 	for _, b := range all {
-		// TODO if b.Type.Enum != "Radiobroadcast" && b.Type.Enum != "Podcast" {
-		if b.Type.Enum != "Radiobroadcast" {
+		if b.Type.Enum != "Radiobroadcast" && b.Type.Enum != "Podcast" {
 			continue
 		}
 		if b.Status.Enum != "Published" {
@@ -92,7 +90,7 @@ func (s *SubsUpdater) UpdateSubs(ctx context.Context) error {
 
 	err = s.saveSubscriptions(subscriptionsFile, brandsByChannels, 10)
 	if err != nil {
-		return err
+		return fmt.Errorf("save subscriptions: %w", err)
 	}
 
 	return nil
@@ -101,7 +99,7 @@ func (s *SubsUpdater) UpdateSubs(ctx context.Context) error {
 func (s *SubsUpdater) getAllBrands(ctx context.Context) ([]graphql.Brand, error) {
 	brands, ok, err := s.loadBrandsCache(cacheFile)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("load brands cache: %w", err)
 	}
 	if ok {
 		return brands, nil
@@ -109,7 +107,7 @@ func (s *SubsUpdater) getAllBrands(ctx context.Context) ([]graphql.Brand, error)
 
 	brands, err = s.allBrands(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("all brands: %w", err)
 	}
 
 	if err = s.saveBrandsCache(cacheFile, brands); err != nil {
@@ -121,16 +119,12 @@ func (s *SubsUpdater) getAllBrands(ctx context.Context) ([]graphql.Brand, error)
 
 func (s *SubsUpdater) allBrands(ctx context.Context) ([]graphql.Brand, error) {
 	limit := 100
-	client := &graphql.Client{HTTPClient: &http.Client{
-		Timeout: 60 * time.Second,
-	}}
 
 	var all []graphql.Brand
 
 	for page := 1; ; page++ {
-		result, err := client.BrandsRaw(ctx, limit, page)
+		result, err := s.client.BrandsRaw(ctx, limit, page)
 		if err != nil {
-			// all or nothing
 			return nil, fmt.Errorf("get brands page %d: %w", page, err)
 		}
 
@@ -155,12 +149,12 @@ func (s *SubsUpdater) loadBrandsCache(filename string) ([]graphql.Brand, bool, e
 			// no cache file
 			return nil, false, nil
 		}
-		return nil, false, err
+		return nil, false, fmt.Errorf("read cache file: %w", err)
 	}
 
 	var cache brandsCache
 	if err = json.Unmarshal(data, &cache); err != nil {
-		return nil, false, err
+		return nil, false, fmt.Errorf("unmarshal cache: %w", err)
 	}
 
 	if time.Since(cache.UpdatedAt) >= cacheTTL {
@@ -179,14 +173,17 @@ func (s *SubsUpdater) saveBrandsCache(filename string, brands []graphql.Brand) e
 
 	data, err := json.MarshalIndent(cache, "", "  ")
 	if err != nil {
-		return err
+		return fmt.Errorf("marshal cache: %w", err)
 	}
 
 	dir := filepath.Dir(filename)
 	if err := os.MkdirAll(dir, 0o755); err != nil {
-		return err
+		return fmt.Errorf("mkdir cache dir: %w", err)
 	}
-	return os.WriteFile(filename, data, 0o644)
+	if err := os.WriteFile(filename, data, 0o644); err != nil {
+		return fmt.Errorf("write cache file: %w", err)
+	}
+	return nil
 }
 
 func (s *SubsUpdater) saveSubscriptions(filename string, brandsByChannels map[int]channelBrands, limit int) error {
@@ -217,5 +214,8 @@ func (s *SubsUpdater) saveSubscriptions(filename string, brandsByChannels map[in
 		stringBuilder.WriteString("\n")
 	}
 
-	return os.WriteFile(filename, []byte(stringBuilder.String()), 0644)
+	if err := os.WriteFile(filename, []byte(stringBuilder.String()), 0644); err != nil {
+		return fmt.Errorf("write subscriptions file: %w", err)
+	}
+	return nil
 }
