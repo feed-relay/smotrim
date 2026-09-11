@@ -5,7 +5,6 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/feed-relay/contracts"
 	"github.com/feed-relay/rsscast"
 )
 
@@ -18,16 +17,16 @@ type feed interface {
 }
 
 type feedsTask struct {
-	subscription Sub
+	feed feed
 }
 
-func (p *FeedProvider) Feeds(ctx context.Context, feeds []contracts.Subscription) (map[string]*rsscast.Feed, error) {
-	var allTasks []feedTask
-	for _, subscription := range feeds {
-		if len(subscription.Shows()) == 0 {
+func (p *FeedProvider) Feeds(ctx context.Context, feeds []feed) (map[string]*rsscast.Feed, error) {
+	var allTasks []feedsTask
+	for _, f := range feeds {
+		if len(f.Shows()) == 0 {
 			continue
 		}
-		allTasks = append(allTasks, feedTask{subscription: subscription})
+		allTasks = append(allTasks, feedsTask{feed: f})
 	}
 
 	workers := min(feedWorkers, len(allTasks))
@@ -35,7 +34,7 @@ func (p *FeedProvider) Feeds(ctx context.Context, feeds []contracts.Subscription
 		return nil, errors.New("smotrim: no shows")
 	}
 
-	tasks := make(chan feedTask)
+	tasks := make(chan feedsTask)
 
 	var wg sync.WaitGroup
 	var mu sync.Mutex
@@ -54,7 +53,7 @@ func (p *FeedProvider) Feeds(ctx context.Context, feeds []contracts.Subscription
 			defer wg.Done()
 
 			for task := range tasks {
-				slug, feed, err := p.feed(ctx, task.subscription, requests)
+				slug, feed, err := p.feed(ctx, task.feed, requests)
 				if err != nil {
 					mu.Lock()
 					errs = append(errs, err)
@@ -90,6 +89,6 @@ func (p *FeedProvider) Feeds(ctx context.Context, feeds []contracts.Subscription
 	return nil, err
 }
 
-func (p *FeedProvider) feed(ctx context.Context, subscription Sub, requests chan struct{}) (string, *rsscast.Feed, error) {
+func (p *FeedProvider) feed(ctx context.Context, feed feed, requests chan struct{}) (string, *rsscast.Feed, error) {
 	return "", nil, nil
 }
