@@ -11,13 +11,15 @@ import (
 const audioEndpoint = "audio"
 
 type Audio struct {
-	Id        int    `json:"id"`
-	PublicId  int    `json:"publicId"`
-	Duration  int64  `json:"duration"`
-	ShareLink string `json:"shareLink"`
-	Streams   struct {
-		Mp3 string `json:"mp3"`
-	} `json:"streams"`
+	Id        int      `json:"id"`
+	PublicId  int      `json:"publicId"`
+	Duration  int64    `json:"duration"`
+	ShareLink string   `json:"shareLink"`
+	Streams   *Streams `json:"streams"`
+}
+
+type Streams struct {
+	Mp3 string `json:"mp3"`
 }
 
 type audioResult struct {
