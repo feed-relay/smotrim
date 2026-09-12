@@ -1,4 +1,4 @@
-package provider
+package feed_provider
 
 import (
 	"context"
@@ -13,9 +13,55 @@ import (
 	"github.com/feed-relay/smotrim/internal/api/graphql"
 )
 
-type feedAdapter struct {
+//go:generate moq --out ./mocks/filesizer_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . FileSizer
+//go:generate moq --out ./mocks/config_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . Config
+//go:generate moq --out ./mocks/adapter_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . Adapter
+
+const defaultLength = 1_000_000 // 1 MB
+
+// FileSizer resolves remote media file sizes in bytes.
+type FileSizer interface {
+	// Sizes returns sizes for the given URLs. Missing or unknown sizes are omitted.
+	Sizes(ctx context.Context, urls []string) map[string]int64
+}
+
+// Config supplies feed-level metadata that isn't derived from Smotrim data.
+//
+// NOTE: reconstructed for testing purposes from its call sites in the
+// uploaded adapter.go (Generator/ItunesOwnerName/ItunesOwnerEmail) - point
+// this at wherever Config actually lives in the real module if the name
+// or method set differs.
+type Config interface {
+	Generator() string
+	ItunesOwnerName() string
+	ItunesOwnerEmail() string
+}
+
+// Show groups one brand's channel, metadata, and episodes for feed
+// generation. A Feed call can combine several Shows into one feed.
+type Show struct {
+	Channel  *graphql.Channel
+	Brand    *graphql.Brand
+	Episodes []*graphql.Episode
+}
+
+type Adapter interface {
+	Feed(ctx context.Context, shows []Show, audios map[int]*api.Audio) (*rsscast.Feed, error)
+}
+
+type adapter struct {
 	config    Config
 	fileSizer FileSizer
+}
+
+// NewAdapter builds the default Adapter.
+//
+// NOTE for review: adapter's fields are unexported, so black-box tests
+// (package provider_test) need some constructor to reach them with fake
+// Config/FileSizer. Add this if one doesn't already exist under a
+// different name - swap the name below to match if it does.
+func NewAdapter(config Config, fileSizer FileSizer) Adapter {
+	return &adapter{config: config, fileSizer: fileSizer}
 }
 
 // mergedEpisode pairs an episode with the channel of the show it came
@@ -30,7 +76,11 @@ type mergedEpisode struct {
 // comes from the first show, since RSS has no way to express more than
 // one; per-episode itunes:author still reflects each episode's own show.
 // Episodes without a linked audio or matching audio entry are skipped.
-func (a *feedAdapter) Feed(ctx context.Context, shows []Show, audios map[int]*api.Audio) (*rsscast.Feed, error) {
+func (a *adapter) Feed(
+	ctx context.Context,
+	shows []Show,
+	audios map[int]*api.Audio,
+) (*rsscast.Feed, error) {
 	if len(shows) == 0 {
 		return nil, errors.New("smotrim: no shows provided")
 	}
@@ -134,61 +184,10 @@ func (a *feedAdapter) Feed(ctx context.Context, shows []Show, audios map[int]*ap
 	return feed, nil
 }
 
-func (a *feedAdapter) episodeAudio(episode *graphql.Episode, audios map[int]*api.Audio) *api.Audio {
-	if episode == nil || episode.Audio == nil {
-		return nil
-	}
-	audio := audios[episode.Audio.PublicId]
-	if audio == nil || audio.Streams.Mp3 == "" {
-		return nil
-	}
-	return audio
-}
-
-// firstAirDate returns the air date of the first non-nil episode.
-func (a *feedAdapter) firstAirDate(episodes []*graphql.Episode) (time.Time, bool) {
-	for _, episode := range episodes {
-		if episode != nil && episode.AirDate != nil {
-			return episode.AirDate.Time(), true
-		}
-	}
-	return time.Time{}, false
-}
-
-func (a *feedAdapter) resolveSizes(ctx context.Context, episodes []*graphql.Episode, audios map[int]*api.Audio) map[string]int64 {
-	seen := make(map[string]struct{}, len(episodes))
-	urls := make([]string, 0, len(episodes))
-
-	for _, episode := range episodes {
-		audio := a.episodeAudio(episode, audios)
-		if audio == nil {
-			continue
-		}
-
-		url := audio.Streams.Mp3
-		if _, ok := seen[url]; ok {
-			continue
-		}
-
-		seen[url] = struct{}{}
-		urls = append(urls, url)
-	}
-
-	return a.fileSizer.Sizes(ctx, urls)
-}
-
-func (a *feedAdapter) length(sizes map[string]int64, audio *api.Audio) int64 {
-	l, ok := sizes[audio.Streams.Mp3]
-	if !ok || l <= 0 {
-		return defaultLength
-	}
-	return l
-}
-
 // flatten merges every show's episodes into one newest-first list, paired
 // with the channel of the show each episode came from. firstAirDate
 // relies on this order.
-func (a *feedAdapter) flatten(shows []Show) []mergedEpisode {
+func (a *adapter) flatten(shows []Show) []mergedEpisode {
 	var merged []mergedEpisode
 	for _, show := range shows {
 		if show.Channel == nil || show.Brand == nil {
@@ -215,9 +214,60 @@ func (a *feedAdapter) flatten(shows []Show) []mergedEpisode {
 	return merged
 }
 
-func (a *feedAdapter) airDate(episode *graphql.Episode) (time.Time, bool) {
+func (a *adapter) airDate(episode *graphql.Episode) (time.Time, bool) {
 	if episode == nil || episode.AirDate == nil {
 		return time.Time{}, false
 	}
 	return episode.AirDate.Time(), true
+}
+
+func (a *adapter) episodeAudio(episode *graphql.Episode, audios map[int]*api.Audio) *api.Audio {
+	if episode == nil || episode.Audio == nil {
+		return nil
+	}
+	audio := audios[episode.Audio.PublicId]
+	if audio == nil || audio.Streams.Mp3 == "" {
+		return nil
+	}
+	return audio
+}
+
+// firstAirDate returns the air date of the first non-nil episode.
+func (a *adapter) firstAirDate(episodes []*graphql.Episode) (time.Time, bool) {
+	for _, episode := range episodes {
+		if episode != nil && episode.AirDate != nil {
+			return episode.AirDate.Time(), true
+		}
+	}
+	return time.Time{}, false
+}
+
+func (a *adapter) resolveSizes(ctx context.Context, episodes []*graphql.Episode, audios map[int]*api.Audio) map[string]int64 {
+	seen := make(map[string]struct{}, len(episodes))
+	urls := make([]string, 0, len(episodes))
+
+	for _, episode := range episodes {
+		audio := a.episodeAudio(episode, audios)
+		if audio == nil {
+			continue
+		}
+
+		url := audio.Streams.Mp3
+		if _, ok := seen[url]; ok {
+			continue
+		}
+
+		seen[url] = struct{}{}
+		urls = append(urls, url)
+	}
+
+	return a.fileSizer.Sizes(ctx, urls)
+}
+
+func (a *adapter) length(sizes map[string]int64, audio *api.Audio) int64 {
+	l, ok := sizes[audio.Streams.Mp3]
+	if !ok || l <= 0 {
+		return defaultLength
+	}
+	return l
 }
