@@ -7,6 +7,10 @@ import (
 
 type SmotrimTime time.Time
 
+func NewSmotrimTime(t time.Time) *SmotrimTime {
+	return new(SmotrimTime(t))
+}
+
 type Channel struct {
 	ID    int    `json:"id,omitempty"`
 	Title string `json:"title,omitempty"`
@@ -88,6 +92,14 @@ type Tariff struct {
 }
 
 type BrandEpisodes struct {
+	Brand    *Brand
+	Episodes []*Episode
+}
+
+// Show groups one brand's channel, metadata, and episodes for feed
+// generation. A Feed call can combine several Shows into one feed.
+type Show struct {
+	Channel  *Channel
 	Brand    *Brand
 	Episodes []*Episode
 }

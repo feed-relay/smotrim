@@ -37,16 +37,8 @@ type Config interface {
 	ItunesOwnerEmail() string
 }
 
-// Show groups one brand's channel, metadata, and episodes for feed
-// generation. A Feed call can combine several Shows into one feed.
-type Show struct {
-	Channel  *graphql.Channel
-	Brand    *graphql.Brand
-	Episodes []*graphql.Episode
-}
-
 type Adapter interface {
-	Feed(ctx context.Context, shows []Show, audios map[int]*api.Audio) (*rsscast.Feed, error)
+	Feed(ctx context.Context, shows []graphql.Show, audios map[int]*api.Audio) (*rsscast.Feed, error)
 }
 
 type adapter struct {
@@ -78,7 +70,7 @@ type mergedEpisode struct {
 // Episodes without a linked audio or matching audio entry are skipped.
 func (a *adapter) Feed(
 	ctx context.Context,
-	shows []Show,
+	shows []graphql.Show,
 	audios map[int]*api.Audio,
 ) (*rsscast.Feed, error) {
 	if len(shows) == 0 {
@@ -187,7 +179,7 @@ func (a *adapter) Feed(
 // flatten merges every show's episodes into one newest-first list, paired
 // with the channel of the show each episode came from. firstAirDate
 // relies on this order.
-func (a *adapter) flatten(shows []Show) []mergedEpisode {
+func (a *adapter) flatten(shows []graphql.Show) []mergedEpisode {
 	var merged []mergedEpisode
 	for _, show := range shows {
 		if show.Channel == nil || show.Brand == nil {

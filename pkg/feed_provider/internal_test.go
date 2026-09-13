@@ -29,15 +29,15 @@ func TestAdapterFlatten(t *testing.T) {
 	brand2 := &graphql.Brand{ID: 2, Title: "brand-2"}
 
 	now := time.Now()
-	epNewest := &graphql.Episode{Title: "newest", AirDate: graphql.NewAirDate(now.Add(-1 * time.Hour))}
-	epMiddle := &graphql.Episode{Title: "middle", AirDate: graphql.NewAirDate(now.Add(-2 * time.Hour))}
-	epOldest := &graphql.Episode{Title: "oldest", AirDate: graphql.NewAirDate(now.Add(-3 * time.Hour))}
+	epNewest := &graphql.Episode{Title: "newest", AirDate: graphql.NewSmotrimTime(now.Add(-1 * time.Hour))}
+	epMiddle := &graphql.Episode{Title: "middle", AirDate: graphql.NewSmotrimTime(now.Add(-2 * time.Hour))}
+	epOldest := &graphql.Episode{Title: "oldest", AirDate: graphql.NewSmotrimTime(now.Add(-3 * time.Hour))}
 	epUndated := &graphql.Episode{Title: "undated"}
 
 	// Deliberately NOT pre-sorted and interleaved across shows, so a bug
 	// that just concatenates show order instead of sorting by date would
 	// fail this test.
-	shows := []Show{
+	shows := []graphql.Show{
 		{Channel: ch1, Brand: brand1, Episodes: []*graphql.Episode{epMiddle, epUndated}},
 		{Channel: ch2, Brand: brand2, Episodes: []*graphql.Episode{epNewest, epOldest}},
 	}
@@ -59,7 +59,7 @@ func TestAdapterFlatten(t *testing.T) {
 
 func TestAdapterFlattenSkipsShowsMissingChannelOrBrand(t *testing.T) {
 	ep := &graphql.Episode{Title: "ep"}
-	shows := []Show{
+	shows := []graphql.Show{
 		{Channel: nil, Brand: &graphql.Brand{}, Episodes: []*graphql.Episode{ep}},
 		{Channel: &graphql.Channel{}, Brand: nil, Episodes: []*graphql.Episode{ep}},
 	}
@@ -85,7 +85,7 @@ func TestAdapterAirDate(t *testing.T) {
 
 	t.Run("set AirDate", func(t *testing.T) {
 		want := time.Date(2026, 1, 2, 3, 4, 5, 0, time.UTC)
-		got, ok := a.airDate(&graphql.Episode{AirDate: graphql.NewAirDate(want)})
+		got, ok := a.airDate(&graphql.Episode{AirDate: graphql.NewSmotrimTime(want)})
 		require.True(t, ok)
 		assert.True(t, want.Equal(got))
 	})
@@ -93,8 +93,8 @@ func TestAdapterAirDate(t *testing.T) {
 
 func TestAdapterEpisodeAudio(t *testing.T) {
 	a := &adapter{}
-	audio1 := &api.Audio{Streams: api.AudioStreams{Mp3: "https://example.com/1.mp3"}}
-	audioEmptyStream := &api.Audio{Streams: api.AudioStreams{Mp3: ""}}
+	audio1 := &api.Audio{Streams: &api.Streams{Mp3: "https://example.com/1.mp3"}}
+	audioEmptyStream := &api.Audio{Streams: &api.Streams{Mp3: ""}}
 	audios := map[int]*api.Audio{
 		1: audio1,
 		2: audioEmptyStream,
@@ -107,9 +107,9 @@ func TestAdapterEpisodeAudio(t *testing.T) {
 	}{
 		{"nil episode", nil, nil},
 		{"nil audio ref", &graphql.Episode{}, nil},
-		{"not in audios map", &graphql.Episode{Audio: &graphql.AudioRef{PublicId: 999}}, nil},
-		{"empty mp3 stream", &graphql.Episode{Audio: &graphql.AudioRef{PublicId: 2}}, nil},
-		{"found", &graphql.Episode{Audio: &graphql.AudioRef{PublicId: 1}}, audio1},
+		{"not in audios map", &graphql.Episode{Audio: &graphql.Audio{PublicId: 999}}, nil},
+		{"empty mp3 stream", &graphql.Episode{Audio: &graphql.Audio{PublicId: 2}}, nil},
+		{"found", &graphql.Episode{Audio: &graphql.Audio{PublicId: 1}}, audio1},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -142,7 +142,7 @@ func TestAdapterFirstAirDate(t *testing.T) {
 		eps := []*graphql.Episode{
 			nil,
 			{Title: "no-date"},
-			{Title: "dated", AirDate: graphql.NewAirDate(want)},
+			{Title: "dated", AirDate: graphql.NewSmotrimTime(want)},
 		}
 		got, ok := a.firstAirDate(eps)
 		require.True(t, ok)
@@ -152,7 +152,7 @@ func TestAdapterFirstAirDate(t *testing.T) {
 
 func TestAdapterLength(t *testing.T) {
 	a := &adapter{}
-	audio := &api.Audio{Streams: api.AudioStreams{Mp3: "https://example.com/a.mp3"}}
+	audio := &api.Audio{Streams: &api.Streams{Mp3: "https://example.com/a.mp3"}}
 
 	t.Run("known positive size", func(t *testing.T) {
 		sizes := map[string]int64{"https://example.com/a.mp3": 12345}
@@ -184,15 +184,15 @@ func (f *fakeFileSizer) Sizes(_ context.Context, urls []string) map[string]int64
 
 func TestAdapterResolveSizes(t *testing.T) {
 	audios := map[int]*api.Audio{
-		1: {Streams: api.AudioStreams{Mp3: "https://example.com/1.mp3"}},
-		2: {Streams: api.AudioStreams{Mp3: "https://example.com/2.mp3"}},
+		1: {Streams: &api.Streams{Mp3: "https://example.com/1.mp3"}},
+		2: {Streams: &api.Streams{Mp3: "https://example.com/2.mp3"}},
 	}
 	episodes := []*graphql.Episode{
-		{Audio: &graphql.AudioRef{PublicId: 1}},
-		{Audio: &graphql.AudioRef{PublicId: 2}},
-		{Audio: &graphql.AudioRef{PublicId: 1}},   // duplicate URL - must be deduped
-		{Audio: nil},                              // no audio - skipped
-		{Audio: &graphql.AudioRef{PublicId: 999}}, // not in audios - skipped
+		{Audio: &graphql.Audio{PublicId: 1}},
+		{Audio: &graphql.Audio{PublicId: 2}},
+		{Audio: &graphql.Audio{PublicId: 1}},   // duplicate URL - must be deduped
+		{Audio: nil},                           // no audio - skipped
+		{Audio: &graphql.Audio{PublicId: 999}}, // not in audios - skipped
 	}
 
 	fs := &fakeFileSizer{sizes: map[string]int64{"https://example.com/1.mp3": 111}}

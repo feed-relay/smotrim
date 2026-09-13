@@ -128,7 +128,7 @@ func (p *Provider) audioData(ctx context.Context, episodes []*graphql.Episode, r
 func (p *Provider) feed(ctx context.Context, subscription Sub, requests chan struct{}) (string, *rsscast.Feed, error) {
 	showIDs := subscription.Shows()
 
-	results := make([]Show, len(showIDs))
+	results := make([]graphql.Show, len(showIDs))
 	errs := make([]error, len(showIDs))
 
 	var wg sync.WaitGroup
@@ -160,7 +160,7 @@ func (p *Provider) feed(ctx context.Context, subscription Sub, requests chan str
 				return
 			}
 
-			results[i] = Show{
+			results[i] = graphql.Show{
 				Channel:  &brandEpisodes.Brand.Channels[0],
 				Brand:    brandEpisodes.Brand,
 				Episodes: brandEpisodes.Episodes,
@@ -171,7 +171,7 @@ func (p *Provider) feed(ctx context.Context, subscription Sub, requests chan str
 
 	fetchErr := errors.Join(errs...)
 
-	var ok []Show
+	var ok []graphql.Show
 	for _, r := range results {
 		if r.Brand != nil {
 			ok = append(ok, r)

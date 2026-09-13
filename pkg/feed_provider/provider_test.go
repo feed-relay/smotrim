@@ -56,7 +56,7 @@ func TestFeeds_SingleSubscriptionSingleShow(t *testing.T) {
 
 	wantFeed := &rsscast.Feed{}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return wantFeed, nil
 		},
 	}
@@ -90,7 +90,7 @@ func TestFeeds_MultipleSubscriptions(t *testing.T) {
 		},
 	}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return &rsscast.Feed{}, nil
 		},
 	}
@@ -146,7 +146,7 @@ func TestFeeds_PartialSuccessWithinSubscription(t *testing.T) {
 
 	wantFeed := &rsscast.Feed{}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return wantFeed, nil
 		},
 	}
@@ -239,7 +239,7 @@ func TestFeeds_AdapterFeedError(t *testing.T) {
 		},
 	}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return nil, errors.New("rss build failed")
 		},
 	}
@@ -276,7 +276,7 @@ func TestFeeds_ConcurrencyManySubscriptionsAndShows(t *testing.T) {
 		},
 	}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return &rsscast.Feed{}, nil
 		},
 	}

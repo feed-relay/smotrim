@@ -5,24 +5,23 @@ import (
 	"testing"
 	"time"
 
-	"github.com/feed-relay/smotrim/pkg/provider"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/feed-relay/smotrim/feed_provider/mocks"
 	"github.com/feed-relay/smotrim/internal/api"
 	"github.com/feed-relay/smotrim/internal/api/graphql"
+	"github.com/feed-relay/smotrim/pkg/feed_provider/mocks"
 )
 
 // These tests exercise Adapter.Feed only through its exported contract
-// (via provider.NewAdapter), using the real moq-generated mocks. The
+// (via NewAdapter), using the real moq-generated mocks. The
 // trickier merge/sort/skip logic (flatten, airDate, episodeAudio, ...)
 // has its own direct, white-box tests in internal_test.go - this file
 // checks Feed's validation errors and a happy-path smoke test, since
 // package provider_test can't reach *rsscast.Feed's internals to assert
 // on built items directly.
 
-func newTestAdapter() provider.Adapter {
+func newTestAdapter() Adapter {
 	cfg := &mocks.ConfigMock{
 		GeneratorFunc:        func() string { return "smotrim-feed-provider" },
 		ItunesOwnerNameFunc:  func() string { return "Smotrim Feeds" },
@@ -37,17 +36,17 @@ func newTestAdapter() provider.Adapter {
 			return sizes
 		},
 	}
-	return provider.NewAdapter(cfg, fs)
+	return NewAdapter(cfg, fs)
 }
 
 func TestAdapterFeed_ValidationErrors(t *testing.T) {
 	validChannel := &graphql.Channel{Title: "channel"}
 	validBrand := &graphql.Brand{ID: 1, Title: "brand"}
-	datedEpisode := &graphql.Episode{Title: "ep", AirDate: graphql.NewAirDate(time.Now())}
+	datedEpisode := &graphql.Episode{Title: "ep", AirDate: graphql.NewSmotrimTime(time.Now())}
 
 	tests := []struct {
 		name      string
-		shows     []provider.Show
+		shows     []graphql.Show
 		wantInErr string
 	}{
 		{
@@ -57,28 +56,28 @@ func TestAdapterFeed_ValidationErrors(t *testing.T) {
 		},
 		{
 			name: "primary show has nil channel",
-			shows: []provider.Show{
+			shows: []graphql.Show{
 				{Channel: nil, Brand: validBrand, Episodes: []*graphql.Episode{datedEpisode}},
 			},
 			wantInErr: "channel is nil",
 		},
 		{
 			name: "primary show has nil brand",
-			shows: []provider.Show{
+			shows: []graphql.Show{
 				{Channel: validChannel, Brand: nil, Episodes: []*graphql.Episode{datedEpisode}},
 			},
 			wantInErr: "brand is nil",
 		},
 		{
 			name: "no episodes across any show",
-			shows: []provider.Show{
+			shows: []graphql.Show{
 				{Channel: validChannel, Brand: validBrand, Episodes: nil},
 			},
 			wantInErr: "no episodes provided",
 		},
 		{
 			name: "no episode has an air date",
-			shows: []provider.Show{
+			shows: []graphql.Show{
 				{Channel: validChannel, Brand: validBrand, Episodes: []*graphql.Episode{{Title: "undated"}}},
 			},
 			wantInErr: "no non-nil episode to seed pubDate from",
@@ -98,15 +97,15 @@ func TestAdapterFeed_ValidationErrors(t *testing.T) {
 }
 
 func TestAdapterFeed_HappyPath(t *testing.T) {
-	shows := []provider.Show{
+	shows := []graphql.Show{
 		{
 			Channel: &graphql.Channel{Title: "channel-1"},
 			Brand:   &graphql.Brand{ID: 1, Title: "brand-1", Description: "desc-1"},
 			Episodes: []*graphql.Episode{
 				{
 					Title:   "ep-1",
-					AirDate: graphql.NewAirDate(time.Now().Add(-1 * time.Hour)),
-					Audio:   &graphql.AudioRef{PublicId: 1},
+					AirDate: graphql.NewSmotrimTime(time.Now().Add(-1 * time.Hour)),
+					Audio:   &graphql.Audio{PublicId: 1},
 				},
 			},
 		},
@@ -116,15 +115,15 @@ func TestAdapterFeed_HappyPath(t *testing.T) {
 			Episodes: []*graphql.Episode{
 				{
 					Title:   "ep-2",
-					AirDate: graphql.NewAirDate(time.Now().Add(-2 * time.Hour)),
-					Audio:   &graphql.AudioRef{PublicId: 2},
+					AirDate: graphql.NewSmotrimTime(time.Now().Add(-2 * time.Hour)),
+					Audio:   &graphql.Audio{PublicId: 2},
 				},
 			},
 		},
 	}
 	audios := map[int]*api.Audio{
-		1: {ShareLink: "https://smotrim.ru/share/1", Streams: api.AudioStreams{Mp3: "https://smotrim.ru/1.mp3"}, Duration: 1800},
-		2: {ShareLink: "https://smotrim.ru/share/2", Streams: api.AudioStreams{Mp3: "https://smotrim.ru/2.mp3"}, Duration: 1900},
+		1: {ShareLink: "https://smotrim.ru/share/1", Streams: &api.Streams{Mp3: "https://smotrim.ru/1.mp3"}, Duration: 1800},
+		2: {ShareLink: "https://smotrim.ru/share/2", Streams: &api.Streams{Mp3: "https://smotrim.ru/2.mp3"}, Duration: 1900},
 	}
 
 	a := newTestAdapter()
