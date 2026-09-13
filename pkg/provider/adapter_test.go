@@ -50,7 +50,7 @@ func mustEpisode(t *testing.T, js string) *graphql.Episode {
 // map[int]*api.Audio by public ID) - not to be confused with the lightweight
 // graphql.Audio reference embedded in Episode.
 func newAudio(publicId int, shareLink, mp3 string, duration int64) *api.Audio {
-	a := &api.Audio{PublicId: publicId, ShareLink: shareLink, Duration: duration}
+	a := &api.Audio{PublicId: publicId, ShareLink: shareLink, Duration: duration, Streams: &api.Streams{}}
 	a.Streams.Mp3 = mp3
 	return a
 }
