@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"log/slog"
 	"os"
 	"path/filepath"
 	"slices"
@@ -91,6 +92,7 @@ func (s *SubsUpdater) UpdateSubs(ctx context.Context) error {
 			continue
 		}
 		if len(b.Channels) == 0 {
+			slog.Debug("empty channel", slog.String("brandId", fmt.Sprintf("[%d] %s", b.ID, b.Title)))
 			continue
 		}
 
