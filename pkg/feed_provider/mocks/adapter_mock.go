@@ -9,7 +9,7 @@ import (
 
 	"github.com/feed-relay/rsscast"
 	"github.com/feed-relay/smotrim/internal/api"
-	"github.com/feed-relay/smotrim/pkg/feed_provider"
+	"github.com/feed-relay/smotrim/internal/api/graphql"
 )
 
 // AdapterMock is a mock implementation of feed_provider.Adapter.
@@ -18,7 +18,7 @@ import (
 //
 //		// make and configure a mocked feed_provider.Adapter
 //		mockedAdapter := &AdapterMock{
-//			FeedFunc: func(ctx context.Context, shows []feed_provider.Show, audios map[int]*api.Audio) (*rsscast.Feed, error) {
+//			FeedFunc: func(ctx context.Context, shows []graphql.Show, audios map[int]*api.Audio) (*rsscast.Feed, error) {
 //				panic("mock out the Feed method")
 //			},
 //		}
@@ -29,7 +29,7 @@ import (
 //	}
 type AdapterMock struct {
 	// FeedFunc mocks the Feed method.
-	FeedFunc func(ctx context.Context, shows []feed_provider.Show, audios map[int]*api.Audio) (*rsscast.Feed, error)
+	FeedFunc func(ctx context.Context, shows []graphql.Show, audios map[int]*api.Audio) (*rsscast.Feed, error)
 
 	// calls tracks calls to the methods.
 	calls struct {
@@ -38,7 +38,7 @@ type AdapterMock struct {
 			// Ctx is the ctx argument value.
 			Ctx context.Context
 			// Shows is the shows argument value.
-			Shows []feed_provider.Show
+			Shows []graphql.Show
 			// Audios is the audios argument value.
 			Audios map[int]*api.Audio
 		}
@@ -47,13 +47,13 @@ type AdapterMock struct {
 }
 
 // Feed calls FeedFunc.
-func (mock *AdapterMock) Feed(ctx context.Context, shows []feed_provider.Show, audios map[int]*api.Audio) (*rsscast.Feed, error) {
+func (mock *AdapterMock) Feed(ctx context.Context, shows []graphql.Show, audios map[int]*api.Audio) (*rsscast.Feed, error) {
 	if mock.FeedFunc == nil {
 		panic("AdapterMock.FeedFunc: method is nil but Adapter.Feed was just called")
 	}
 	callInfo := struct {
 		Ctx    context.Context
-		Shows  []feed_provider.Show
+		Shows  []graphql.Show
 		Audios map[int]*api.Audio
 	}{
 		Ctx:    ctx,
@@ -72,12 +72,12 @@ func (mock *AdapterMock) Feed(ctx context.Context, shows []feed_provider.Show, a
 //	len(mockedAdapter.FeedCalls())
 func (mock *AdapterMock) FeedCalls() []struct {
 	Ctx    context.Context
-	Shows  []feed_provider.Show
+	Shows  []graphql.Show
 	Audios map[int]*api.Audio
 } {
 	var calls []struct {
 		Ctx    context.Context
-		Shows  []feed_provider.Show
+		Shows  []graphql.Show
 		Audios map[int]*api.Audio
 	}
 	mock.lockFeed.RLock()
