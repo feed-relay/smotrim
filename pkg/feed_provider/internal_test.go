@@ -5,6 +5,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/feed-relay/smotrim/pkg/feed_provider/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -169,19 +170,6 @@ func TestAdapterLength(t *testing.T) {
 	})
 }
 
-// fakeFileSizer is a hand-written test double, not a moq mock: it's used
-// only from this white-box file, which can't import provider/mocks (see
-// the package comment above).
-type fakeFileSizer struct {
-	gotURLs []string
-	sizes   map[string]int64
-}
-
-func (f *fakeFileSizer) Sizes(_ context.Context, urls []string) map[string]int64 {
-	f.gotURLs = urls
-	return f.sizes
-}
-
 func TestAdapterResolveSizes(t *testing.T) {
 	audios := map[int]*api.Audio{
 		1: {Streams: &api.Streams{Mp3: "https://example.com/1.mp3"}},
@@ -195,13 +183,32 @@ func TestAdapterResolveSizes(t *testing.T) {
 		{Audio: &graphql.Audio{PublicId: 999}}, // not in audios - skipped
 	}
 
-	fs := &fakeFileSizer{sizes: map[string]int64{"https://example.com/1.mp3": 111}}
-	a := &adapter{fileSizer: fs}
+	var gotURLs []string
+	fs := &mocks.FileSizerMock{
+		SizesFunc: func(_ context.Context, urls []string) map[string]int64 {
+			gotURLs = urls
+			return map[string]int64{
+				"https://example.com/1.mp3": 111,
+			}
+		},
+	}
 
+	a := &adapter{fileSizer: fs}
 	got := a.resolveSizes(context.Background(), episodes, audios)
 
-	assert.ElementsMatch(t, []string{"https://example.com/1.mp3", "https://example.com/2.mp3"}, fs.gotURLs)
-	assert.Equal(t, fs.sizes, got)
+	assert.ElementsMatch(t,
+		[]string{
+			"https://example.com/1.mp3",
+			"https://example.com/2.mp3",
+		},
+		gotURLs,
+	)
+	assert.Equal(t,
+		map[string]int64{
+			"https://example.com/1.mp3": 111,
+		},
+		got,
+	)
 }
 
 func TestAcquireRespectsContextCancellation(t *testing.T) {
