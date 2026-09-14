@@ -10,7 +10,18 @@ const queryChannel = `query Channel($id: Int!) {
 	channel(id: $id) {
 		id
 		title
+		description
+		shortDescription
 		slug
+		images(linkTypes: [Logo, Icon], presets: [Small]) {
+			... on Image {
+				id
+				linkType
+				presets {
+					link
+				}
+			}
+		}
 	}
 }`
 
@@ -18,7 +29,18 @@ const queryChannelBySlug = `query ChannelBySlug($slug: String!) {
 	channel(slug: $slug) {
 		id
 		title
+		description
+		shortDescription
 		slug
+		images(linkTypes: [Logo, Icon], presets: [Small]) {
+			... on Image {
+				id
+				linkType
+				presets {
+					link
+				}
+			}
+		}
 	}
 }`
 

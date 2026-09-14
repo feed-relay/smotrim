@@ -12,9 +12,12 @@ func NewSmotrimTime(t time.Time) *SmotrimTime {
 }
 
 type Channel struct {
-	ID    int    `json:"id,omitempty"`
-	Title string `json:"title,omitempty"`
-	Slug  string `json:"slug,omitempty"`
+	ID               int     `json:"id,omitempty"`
+	Title            string  `json:"title,omitempty"`
+	Description      string  `json:"description,omitempty"`
+	ShortDescription string  `json:"shortDescription,omitempty"`
+	Slug             string  `json:"slug,omitempty"`
+	Images           []Image `json:"images,omitempty"`
 }
 
 type Brand struct {
