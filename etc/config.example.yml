@@ -19,7 +19,7 @@ test_data: true
 output_dir: var/rss
 itunes_owner_name: "Feed Relay Smotrim"
 itunes_owner_email: "feed-relay@example.com"
-generator: "Feed Relay Smotrim v0.2.0 (github.com/feed-relay/smotrim)"
+generator: "Feed Relay Smotrim v0.2.2 (github.com/feed-relay/smotrim)"
 
 # one XML per show
 subscriptions:

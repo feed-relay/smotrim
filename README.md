@@ -71,7 +71,7 @@ The application is configured via a YAML file. Key configuration fields include:
 - `output_dir`: The directory where generated RSS files will be saved.
 - `itunes_owner_name`: The name of the feed owner, used in the Apple Podcasts metadata.
 - `itunes_owner_email`: The email of the feed owner, used in the Apple Podcasts metadata.
-- `generator`: A string describing the tool that generated the feed (e.g., "Feed Relay Smotrim v0.2.0").
+- `generator`: A string describing the tool that generated the feed (e.g., "Feed Relay Smotrim v0.2.2").
 - `subscriptions`: A list of subscription configurations. This can be automatically generated via the `update-subs` utility (which produces `etc/subscriptions.smotrim.yml`). Each subscription consists of:
     - `limit`: The maximum number of episodes to include in the feed for this subscription.
     - `shows`: A list of Smotrim show IDs to include in the feed.
