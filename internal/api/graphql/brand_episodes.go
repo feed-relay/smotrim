@@ -23,7 +23,18 @@ const brandEpisodesQuery = `query BrandEpisodes(
 		channels {
 			id
 			title
+			description
+			shortDescription
 			slug
+			images(linkTypes: [Logo, Icon], presets: [Small]) {
+				... on Image {
+					id
+					linkType
+					presets {
+						link
+					}
+				}
+			}
 		}
 		genres {
 			id
@@ -99,11 +110,12 @@ type brandEpisodesVars struct {
 // BrandEpisodes fetches a brand episodes by brand's numeric id
 func (c *Client) BrandEpisodes(ctx context.Context, id, limit int) (*BrandEpisodes, error) {
 	vars, err := json.Marshal(brandEpisodesVars{
-		BrandId:     id,
-		Page:        1,
-		First:       limit,
-		AirDateFrom: "2000-01-01T00:00:00Z", // to avoid nullable episode.airDate
-		Order:       "DESC",
+		BrandId: id,
+		Page:    1,
+		First:   limit,
+		//AirDateFrom: "1900-01-01T00:00:00Z", // to avoid nullable episode.airDate
+		AirDateFrom: "2026-07-01T00:00:00Z", // to avoid nullable episode.airDate
+		Order:       "DESC",                 // by EPISODES_AIR_DATE
 	})
 	if err != nil {
 		return nil, fmt.Errorf("marshal variables: %w", err)
