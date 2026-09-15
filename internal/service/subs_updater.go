@@ -64,7 +64,7 @@ func NewSubsUpdater(config Config) *SubsUpdater {
 	if config.TestData() {
 		client = api.NewTestdataClient()
 	} else {
-		client = api.NewClient(config.HTTPTimeout())
+		client = api.NewClient(config.HTTPTimeout(), 8)
 	}
 	return &SubsUpdater{
 		client:            client,

@@ -11,12 +11,12 @@ import (
 func TestNewClient(t *testing.T) {
 	t.Run("with timeout", func(t *testing.T) {
 		timeout := 10 * time.Second
-		client := NewClient(timeout)
+		client := NewClient(timeout, 10)
 		assert.NotNil(t, client)
 	})
 
 	t.Run("without timeout", func(t *testing.T) {
-		client := NewClient(0)
+		client := NewClient(0, 10)
 		assert.NotNil(t, client)
 	})
 }

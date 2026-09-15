@@ -23,6 +23,8 @@ const feedWorkers = 4
 
 const clientRequests = 8
 
+const fileSizerMaxConcurrency = 4
+
 // Client is the Smotrim API client used by Provider.
 //
 // NOTE: reconstructed for testing purposes from its two call sites in the
@@ -68,8 +70,8 @@ func NewProvider(config Config) *Provider {
 		client = api.NewTestdataClient()
 		sizer = &media.EmptySizer{}
 	} else {
-		client = api.NewClient(config.HTTPTimeout())
-		sizer = media.NewHttpFileSizer(4)
+		client = api.NewClient(config.HTTPTimeout(), clientRequests)
+		sizer = media.NewHttpFileSizer(fileSizerMaxConcurrency)
 	}
 
 	return &Provider{

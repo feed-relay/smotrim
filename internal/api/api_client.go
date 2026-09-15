@@ -7,6 +7,8 @@ import (
 	"io"
 	"log/slog"
 	"net/http"
+
+	"golang.org/x/time/rate"
 )
 
 const baseURL = "https://player-api.smotrim.ru/api/v1/"
@@ -14,6 +16,7 @@ const baseURL = "https://player-api.smotrim.ru/api/v1/"
 type apiClient struct {
 	BaseURL    string
 	HTTPClient *http.Client
+	Limiter    *rate.Limiter
 }
 
 func (c *apiClient) httpClient() *http.Client {
@@ -34,6 +37,12 @@ func (c *apiClient) get(ctx context.Context, url string, result any) error {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, http.NoBody)
 	if err != nil {
 		return fmt.Errorf("create request: %w", err)
+	}
+
+	if c.Limiter != nil {
+		if err = c.Limiter.Wait(ctx); err != nil {
+			return err
+		}
 	}
 
 	resp, err := c.httpClient().Do(req)
