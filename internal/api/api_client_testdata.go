@@ -13,7 +13,7 @@ var testData embed.FS
 
 type testdataApiClient struct{}
 
-func (c *testdataApiClient) Audio(ctx context.Context, publicId int) (*Audio, error) {
+func (c *testdataApiClient) Audio(_ context.Context, _ int) (*Audio, error) {
 	var res audioResult
 	err := c.do("testdata/audio.json", &res)
 	return res.Data, err

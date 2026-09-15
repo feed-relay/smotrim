@@ -34,7 +34,18 @@ const brandsQuery = `query Brands(
 					... on Channel {
 						id
 						title
+						description
+						shortDescription
 						slug
+						images(linkTypes: [Logo, Icon], presets: [Small]) {
+							... on Image {
+								id
+								linkType
+								presets {
+									link
+								}
+							}
+						}
 					}
 				}
 			}

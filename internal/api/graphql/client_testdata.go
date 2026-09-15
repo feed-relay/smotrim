@@ -13,38 +13,38 @@ var testData embed.FS
 
 type TestdataClient struct{}
 
-func (c *TestdataClient) Channel(ctx context.Context, id int) (*Channel, error) {
+func (c *TestdataClient) Channel(_ context.Context, _ int) (*Channel, error) {
 	var res Channel
 	err := c.do("testdata/channel.json", &res)
 	return &res, err
 }
 
-func (c *TestdataClient) ChannelBySlug(ctx context.Context, slug string) (*Channel, error) {
+func (c *TestdataClient) ChannelBySlug(_ context.Context, _ string) (*Channel, error) {
 	var res Channel
 	err := c.do("testdata/channel.json", &res)
 	return &res, err
 }
 
-func (c *TestdataClient) Brands(ctx context.Context, limit, page int) ([]Brand, error) {
+func (c *TestdataClient) Brands(_ context.Context, _, _ int) ([]Brand, error) {
 	// res, err := c.BrandsRaw(ctx, limit, page)
 	var res BrandsRaw
 	err := c.do("testdata/brands.json", &res)
 	return res.Brands.Data, err
 }
 
-func (c *TestdataClient) BrandsRaw(ctx context.Context, limit, page int) (*BrandsRaw, error) {
+func (c *TestdataClient) BrandsRaw(_ context.Context, _, _ int) (*BrandsRaw, error) {
 	var res BrandsRaw
 	err := c.do("testdata/brands_raw.json", &res)
 	return &res, err
 }
 
-func (c *TestdataClient) Brand(ctx context.Context, id int) (*Brand, error) {
+func (c *TestdataClient) Brand(_ context.Context, _ int) (*Brand, error) {
 	var res Brand
 	err := c.do("testdata/brand.json", &res)
 	return &res, err
 }
 
-func (c *TestdataClient) BrandEpisodes(ctx context.Context, id, limit int) (*BrandEpisodes, error) {
+func (c *TestdataClient) BrandEpisodes(_ context.Context, _, _ int) (*BrandEpisodes, error) {
 	var res brandEpisodesResult
 	err := c.do("testdata/brand-episodes.json", &res)
 	return &BrandEpisodes{
