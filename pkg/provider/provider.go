@@ -78,7 +78,7 @@ func NewProvider(config Config) *Provider {
 		client = api.NewTestdataClient()
 		sizer = &media.EmptySizer{}
 	} else {
-		client = api.NewClient(config.HTTPTimeout())
+		client = api.NewClient(config.HTTPTimeout(), clientRequests)
 		sizer = media.NewHttpFileSizer(4)
 	}
 

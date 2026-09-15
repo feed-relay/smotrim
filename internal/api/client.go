@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"time"
 
+	"golang.org/x/time/rate"
+
 	"github.com/feed-relay/smotrim/internal/api/graphql"
 )
 
@@ -24,16 +26,17 @@ type Client struct {
 	gql gql
 }
 
-func NewClient(timeout time.Duration) *Client {
+func NewClient(timeout time.Duration, rateLimit int) *Client {
 	if timeout <= 0 {
 		timeout = defaultHTTPTimeout
 	}
 
 	httpClient := &http.Client{Timeout: timeout}
+	limiter := rate.NewLimiter(rate.Limit(rateLimit), 1)
 
 	return &Client{
-		api: &apiClient{HTTPClient: httpClient},
-		gql: &graphql.Client{HTTPClient: httpClient},
+		api: &apiClient{HTTPClient: httpClient, Limiter: limiter},
+		gql: &graphql.Client{HTTPClient: httpClient, Limiter: limiter},
 	}
 }
 

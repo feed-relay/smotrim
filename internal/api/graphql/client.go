@@ -11,6 +11,8 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
+
+	"golang.org/x/time/rate"
 )
 
 //go:generate moq --out ./mocks/roundtripper_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . RoundTripper
@@ -50,6 +52,8 @@ type Client struct {
 
 	// AuthToken, when set, is sent as a Bearer token.
 	AuthToken string
+
+	Limiter *rate.Limiter
 }
 
 // NewClient returns a Client with sane defaults (http.DefaultClient and
@@ -78,6 +82,13 @@ func (c *Client) Do(ctx context.Context, operationName, query, vars string, resu
 	if err != nil {
 		return fmt.Errorf("building request failed: %w", err)
 	}
+
+	if c.Limiter != nil {
+		if err = c.Limiter.Wait(ctx); err != nil {
+			return err
+		}
+	}
+
 	resp, err := c.httpClient().Do(r)
 	if err != nil {
 		return fmt.Errorf("request failed: %w", err)
