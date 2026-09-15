@@ -8,12 +8,12 @@ require (
 	github.com/meesooqa/go-cfg v0.1.1
 	github.com/meesooqa/go-lgr v0.1.0
 	github.com/stretchr/testify v1.12.1
+	golang.org/x/time v0.16.0
 )
 
 require (
 	github.com/joho/godotenv v1.5.1 // indirect
 	go.yaml.in/yaml/v3 v3.0.5 // indirect
-	golang.org/x/time v0.16.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
