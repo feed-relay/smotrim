@@ -5,6 +5,7 @@ package mocks
 
 import (
 	"sync"
+	"time"
 )
 
 // ConfigMock is a mock implementation of feed_provider.Config.
@@ -16,11 +17,17 @@ import (
 //			GeneratorFunc: func() string {
 //				panic("mock out the Generator method")
 //			},
+//			HTTPTimeoutFunc: func() time.Duration {
+//				panic("mock out the HTTPTimeout method")
+//			},
 //			ItunesOwnerEmailFunc: func() string {
 //				panic("mock out the ItunesOwnerEmail method")
 //			},
 //			ItunesOwnerNameFunc: func() string {
 //				panic("mock out the ItunesOwnerName method")
+//			},
+//			TestDataFunc: func() bool {
+//				panic("mock out the TestData method")
 //			},
 //		}
 //
@@ -32,16 +39,25 @@ type ConfigMock struct {
 	// GeneratorFunc mocks the Generator method.
 	GeneratorFunc func() string
 
+	// HTTPTimeoutFunc mocks the HTTPTimeout method.
+	HTTPTimeoutFunc func() time.Duration
+
 	// ItunesOwnerEmailFunc mocks the ItunesOwnerEmail method.
 	ItunesOwnerEmailFunc func() string
 
 	// ItunesOwnerNameFunc mocks the ItunesOwnerName method.
 	ItunesOwnerNameFunc func() string
 
+	// TestDataFunc mocks the TestData method.
+	TestDataFunc func() bool
+
 	// calls tracks calls to the methods.
 	calls struct {
 		// Generator holds details about calls to the Generator method.
 		Generator []struct {
+		}
+		// HTTPTimeout holds details about calls to the HTTPTimeout method.
+		HTTPTimeout []struct {
 		}
 		// ItunesOwnerEmail holds details about calls to the ItunesOwnerEmail method.
 		ItunesOwnerEmail []struct {
@@ -49,10 +65,15 @@ type ConfigMock struct {
 		// ItunesOwnerName holds details about calls to the ItunesOwnerName method.
 		ItunesOwnerName []struct {
 		}
+		// TestData holds details about calls to the TestData method.
+		TestData []struct {
+		}
 	}
 	lockGenerator        sync.RWMutex
+	lockHTTPTimeout      sync.RWMutex
 	lockItunesOwnerEmail sync.RWMutex
 	lockItunesOwnerName  sync.RWMutex
+	lockTestData         sync.RWMutex
 }
 
 // Generator calls GeneratorFunc.
@@ -87,6 +108,40 @@ func (mock *ConfigMock) ResetGeneratorCalls() {
 	mock.lockGenerator.Lock()
 	mock.calls.Generator = nil
 	mock.lockGenerator.Unlock()
+}
+
+// HTTPTimeout calls HTTPTimeoutFunc.
+func (mock *ConfigMock) HTTPTimeout() time.Duration {
+	if mock.HTTPTimeoutFunc == nil {
+		panic("ConfigMock.HTTPTimeoutFunc: method is nil but Config.HTTPTimeout was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockHTTPTimeout.Lock()
+	mock.calls.HTTPTimeout = append(mock.calls.HTTPTimeout, callInfo)
+	mock.lockHTTPTimeout.Unlock()
+	return mock.HTTPTimeoutFunc()
+}
+
+// HTTPTimeoutCalls gets all the calls that were made to HTTPTimeout.
+// Check the length with:
+//
+//	len(mockedConfig.HTTPTimeoutCalls())
+func (mock *ConfigMock) HTTPTimeoutCalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockHTTPTimeout.RLock()
+	calls = mock.calls.HTTPTimeout
+	mock.lockHTTPTimeout.RUnlock()
+	return calls
+}
+
+// ResetHTTPTimeoutCalls reset all the calls that were made to HTTPTimeout.
+func (mock *ConfigMock) ResetHTTPTimeoutCalls() {
+	mock.lockHTTPTimeout.Lock()
+	mock.calls.HTTPTimeout = nil
+	mock.lockHTTPTimeout.Unlock()
 }
 
 // ItunesOwnerEmail calls ItunesOwnerEmailFunc.
@@ -157,11 +212,49 @@ func (mock *ConfigMock) ResetItunesOwnerNameCalls() {
 	mock.lockItunesOwnerName.Unlock()
 }
 
+// TestData calls TestDataFunc.
+func (mock *ConfigMock) TestData() bool {
+	if mock.TestDataFunc == nil {
+		panic("ConfigMock.TestDataFunc: method is nil but Config.TestData was just called")
+	}
+	callInfo := struct {
+	}{}
+	mock.lockTestData.Lock()
+	mock.calls.TestData = append(mock.calls.TestData, callInfo)
+	mock.lockTestData.Unlock()
+	return mock.TestDataFunc()
+}
+
+// TestDataCalls gets all the calls that were made to TestData.
+// Check the length with:
+//
+//	len(mockedConfig.TestDataCalls())
+func (mock *ConfigMock) TestDataCalls() []struct {
+} {
+	var calls []struct {
+	}
+	mock.lockTestData.RLock()
+	calls = mock.calls.TestData
+	mock.lockTestData.RUnlock()
+	return calls
+}
+
+// ResetTestDataCalls reset all the calls that were made to TestData.
+func (mock *ConfigMock) ResetTestDataCalls() {
+	mock.lockTestData.Lock()
+	mock.calls.TestData = nil
+	mock.lockTestData.Unlock()
+}
+
 // ResetCalls reset all the calls that were made to all mocked methods.
 func (mock *ConfigMock) ResetCalls() {
 	mock.lockGenerator.Lock()
 	mock.calls.Generator = nil
 	mock.lockGenerator.Unlock()
+
+	mock.lockHTTPTimeout.Lock()
+	mock.calls.HTTPTimeout = nil
+	mock.lockHTTPTimeout.Unlock()
 
 	mock.lockItunesOwnerEmail.Lock()
 	mock.calls.ItunesOwnerEmail = nil
@@ -170,4 +263,8 @@ func (mock *ConfigMock) ResetCalls() {
 	mock.lockItunesOwnerName.Lock()
 	mock.calls.ItunesOwnerName = nil
 	mock.lockItunesOwnerName.Unlock()
+
+	mock.lockTestData.Lock()
+	mock.calls.TestData = nil
+	mock.lockTestData.Unlock()
 }

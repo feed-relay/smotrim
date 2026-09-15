@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/feed-relay/contracts"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
@@ -15,23 +16,6 @@ import (
 	"github.com/feed-relay/smotrim/internal/api/graphql"
 	"github.com/feed-relay/smotrim/pkg/feed_provider/mocks"
 )
-
-// fakeSubscription is a hand-written fixture, not a moq mock: Sub /
-// contracts.Subscription is three plain getters with no call-tracking
-// worth mocking, so a literal struct reads clearer here. NOTE: this
-// assumes contracts.Subscription needs exactly these three methods
-// (matching provider.Sub) - if the real interface has more, add stub
-// implementations for those too.
-type fakeSubscription struct {
-	perShowLimit int
-	shows        []string
-	slug         string
-}
-
-func (s fakeSubscription) Limit() int        { return s.perShowLimit }
-func (s fakeSubscription) PerShowLimit() int { return s.perShowLimit }
-func (s fakeSubscription) Shows() []string   { return s.shows }
-func (s fakeSubscription) Slug() string      { return s.slug }
 
 // IMPORTANT: mock *Func closures run on Provider's internal goroutines,
 // not the test goroutine - only assert.* (non-fatal) is safe to call
@@ -56,18 +40,18 @@ func TestFeeds_SingleSubscriptionSingleShow(t *testing.T) {
 
 	wantFeed := &rsscast.Feed{}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, contracts.Feed, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return wantFeed, nil
 		},
 	}
 
-	p := NewProvider(client, adapterMock)
-	sub := fakeSubscription{perShowLimit: 5, shows: []string{"42"}, slug: "my-sub"}
+	p := &Provider{client: client, adapter: adapterMock}
+	sub := mocks.FakeFeed{RawPerShowLimit: 5, RawShows: []string{"42"}, RawSlug: "my-sub"}
 
-	feeds, err := p.Feeds(context.Background(), []Sub{sub})
+	feeds, err := p.Feeds(context.Background(), []contracts.Feed{sub})
 	require.NoError(t, err)
 	require.Len(t, feeds, 1)
-	assert.Same(t, wantFeed, feeds["smotrim-subscription-my-sub"])
+	assert.Same(t, wantFeed, feeds["smotrim-my-sub"])
 
 	beCalls := client.BrandEpisodesCalls()
 	require.Len(t, beCalls, 1)
@@ -90,29 +74,29 @@ func TestFeeds_MultipleSubscriptions(t *testing.T) {
 		},
 	}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, contracts.Feed, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return &rsscast.Feed{}, nil
 		},
 	}
 
-	p := NewProvider(client, adapterMock)
-	subs := []Sub{
-		fakeSubscription{perShowLimit: 3, shows: []string{"1"}, slug: "sub-a"},
-		fakeSubscription{perShowLimit: 3, shows: []string{"2", "3"}, slug: "sub-b"},
-		fakeSubscription{perShowLimit: 3, shows: nil, slug: "sub-empty"}, // must be excluded, not an error
+	p := &Provider{client: client, adapter: adapterMock}
+	subs := []contracts.Feed{
+		mocks.FakeFeed{RawPerShowLimit: 3, RawShows: []string{"1"}, RawSlug: "sub-a"},
+		mocks.FakeFeed{RawPerShowLimit: 3, RawShows: []string{"2", "3"}, RawSlug: "sub-b"},
+		mocks.FakeFeed{RawPerShowLimit: 3, RawShows: nil, RawSlug: "sub-empty"}, // must be excluded, not an error
 	}
 
 	feeds, err := p.Feeds(context.Background(), subs)
 
 	require.NoError(t, err)
 	assert.Len(t, feeds, 2)
-	assert.Contains(t, feeds, "smotrim-subscription-sub-a")
-	assert.Contains(t, feeds, "smotrim-subscription-sub-b")
-	assert.NotContains(t, feeds, "smotrim-subscription-sub-empty")
+	assert.Contains(t, feeds, "smotrim-sub-a")
+	assert.Contains(t, feeds, "smotrim-sub-b")
+	assert.NotContains(t, feeds, "smotrim-sub-empty")
 }
 
 func TestFeeds_NoShowsAnywhereReturnsError(t *testing.T) {
-	p := NewProvider(&mocks.ClientMock{}, &mocks.AdapterMock{})
+	p := &Provider{client: &mocks.ClientMock{}, adapter: &mocks.AdapterMock{}}
 
 	t.Run("nil subscriptions", func(t *testing.T) {
 		feeds, err := p.Feeds(context.Background(), nil)
@@ -121,9 +105,9 @@ func TestFeeds_NoShowsAnywhereReturnsError(t *testing.T) {
 	})
 
 	t.Run("subscriptions with no shows", func(t *testing.T) {
-		subs := []Sub{
-			fakeSubscription{slug: "a"},
-			fakeSubscription{slug: "b"},
+		subs := []contracts.Feed{
+			mocks.FakeFeed{RawSlug: "a"},
+			mocks.FakeFeed{RawSlug: "b"},
 		}
 		feeds, err := p.Feeds(context.Background(), subs)
 		assert.Nil(t, feeds)
@@ -146,22 +130,22 @@ func TestFeeds_PartialSuccessWithinSubscription(t *testing.T) {
 
 	wantFeed := &rsscast.Feed{}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, contracts.Feed, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return wantFeed, nil
 		},
 	}
 
-	p := NewProvider(client, adapterMock)
-	sub := fakeSubscription{perShowLimit: 5, shows: []string{"1", "2"}, slug: "mixed"}
+	p := &Provider{client: client, adapter: adapterMock}
+	sub := mocks.FakeFeed{RawPerShowLimit: 5, RawShows: []string{"1", "2"}, RawSlug: "mixed"}
 
-	feeds, err := p.Feeds(context.Background(), []Sub{sub})
+	feeds, err := p.Feeds(context.Background(), []contracts.Feed{sub})
 
 	// One show failed, so the error must still surface even though the
 	// subscription's feed still gets built from the surviving show.
 	require.Error(t, err)
 	assert.ErrorContains(t, err, "upstream unavailable")
 	require.Len(t, feeds, 1)
-	assert.Same(t, wantFeed, feeds["smotrim-subscription-mixed"])
+	assert.Same(t, wantFeed, feeds["smotrim-mixed"])
 
 	feedCalls := adapterMock.FeedCalls()
 	require.Len(t, feedCalls, 1)
@@ -202,10 +186,10 @@ func TestFeeds_ShowFetchFailureModes(t *testing.T) {
 			// were called, the generated mock panics.
 			adapterMock := &mocks.AdapterMock{}
 
-			p := NewProvider(client, adapterMock)
-			sub := fakeSubscription{perShowLimit: 5, shows: []string{"1"}, slug: "sub"}
+			p := &Provider{client: client, adapter: adapterMock}
+			sub := mocks.FakeFeed{RawPerShowLimit: 5, RawShows: []string{"1"}, RawSlug: "sub"}
 
-			feeds, err := p.Feeds(context.Background(), []Sub{sub})
+			feeds, err := p.Feeds(context.Background(), []contracts.Feed{sub})
 
 			assert.Empty(t, feeds)
 			assert.Error(t, err)
@@ -219,10 +203,10 @@ func TestFeeds_ExtractNumberFailure(t *testing.T) {
 	// never reach the client at all.
 	client := &mocks.ClientMock{}
 	adapterMock := &mocks.AdapterMock{}
-	p := NewProvider(client, adapterMock)
+	p := &Provider{client: client, adapter: adapterMock}
 
-	sub := fakeSubscription{perShowLimit: 5, shows: []string{"not-a-number"}, slug: "sub"}
-	feeds, err := p.Feeds(context.Background(), []Sub{sub})
+	sub := mocks.FakeFeed{RawPerShowLimit: 5, RawShows: []string{"not-a-number"}, RawSlug: "sub"}
+	feeds, err := p.Feeds(context.Background(), []contracts.Feed{sub})
 
 	assert.Nil(t, feeds)
 	require.Error(t, err)
@@ -239,15 +223,15 @@ func TestFeeds_AdapterFeedError(t *testing.T) {
 		},
 	}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, contracts.Feed, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return nil, errors.New("rss build failed")
 		},
 	}
 
-	p := NewProvider(client, adapterMock)
-	sub := fakeSubscription{perShowLimit: 5, shows: []string{"1"}, slug: "sub"}
+	p := &Provider{client: client, adapter: adapterMock}
+	sub := mocks.FakeFeed{RawPerShowLimit: 5, RawShows: []string{"1"}, RawSlug: "sub"}
 
-	feeds, err := p.Feeds(context.Background(), []Sub{sub})
+	feeds, err := p.Feeds(context.Background(), []contracts.Feed{sub})
 
 	assert.Empty(t, feeds)
 	require.Error(t, err)
@@ -276,20 +260,20 @@ func TestFeeds_ConcurrencyManySubscriptionsAndShows(t *testing.T) {
 		},
 	}
 	adapterMock := &mocks.AdapterMock{
-		FeedFunc: func(context.Context, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
+		FeedFunc: func(context.Context, contracts.Feed, []graphql.Show, map[int]*api.Audio) (*rsscast.Feed, error) {
 			return &rsscast.Feed{}, nil
 		},
 	}
 
-	p := NewProvider(client, adapterMock)
+	p := &Provider{client: client, adapter: adapterMock}
 
-	var subs []Sub
+	var subs []contracts.Feed
 	for i := 1; i <= 20; i++ {
 		var shows []string
 		for j := 0; j < i%5+1; j++ {
 			shows = append(shows, fmt.Sprintf("%d", i*10+j))
 		}
-		subs = append(subs, fakeSubscription{perShowLimit: 3, shows: shows, slug: fmt.Sprintf("sub-%d", i)})
+		subs = append(subs, mocks.FakeFeed{RawPerShowLimit: 3, RawShows: shows, RawSlug: fmt.Sprintf("sub-%d", i)})
 	}
 
 	feeds, err := p.Feeds(context.Background(), subs)

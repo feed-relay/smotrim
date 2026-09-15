@@ -88,7 +88,7 @@ func TestAdapterFeed_ValidationErrors(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			feed, err := a.Feed(context.Background(), tt.shows, map[int]*api.Audio{})
+			feed, err := a.Feed(context.Background(), mocks.FakeFeed{}, tt.shows, map[int]*api.Audio{})
 			require.Error(t, err)
 			assert.ErrorContains(t, err, tt.wantInErr)
 			assert.Nil(t, feed)
@@ -127,7 +127,7 @@ func TestAdapterFeed_HappyPath(t *testing.T) {
 	}
 
 	a := newTestAdapter()
-	feed, err := a.Feed(context.Background(), shows, audios)
+	feed, err := a.Feed(context.Background(), mocks.FakeFeed{}, shows, audios)
 
 	require.NoError(t, err)
 	require.NotNil(t, feed)
