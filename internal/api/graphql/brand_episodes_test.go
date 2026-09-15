@@ -100,7 +100,7 @@ func TestClient_BrandEpisodes_Success(t *testing.T) {
 	assert.Equal(t, "BrandEpisodes", sentReq.OperationName)
 	assert.Equal(t, brandEpisodesQuery, sentReq.Query)
 	assert.JSONEq(t,
-		`{"brandId":10,"page":1,"first":10,"airDateFrom":"2000-01-01T00:00:00Z","order":"DESC"}`,
+		`{"brandId":10,"page":1,"first":10,"airDateFrom":"2026-07-01T00:00:00Z","order":"DESC"}`,
 		string(sentReq.Variables),
 	)
 }
