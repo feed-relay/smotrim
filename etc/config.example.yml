@@ -21,6 +21,7 @@ itunes_owner_name: "Feed Relay Smotrim"
 itunes_owner_email: "feed-relay@example.com"
 generator: "Feed Relay Smotrim v0.2.0 (github.com/feed-relay/smotrim)"
 
+# one XML per show
 subscriptions:
   - limit: 5
     shows:
@@ -33,6 +34,7 @@ subscriptions:
       - "62250" # mayak: Физики и лирики
       - "65319" # mayak: АудиоСторис
 
+# one XML per feed
 feeds:
   # Радио России Санкт-Петербург
   - slug: "radiorus-spb"
