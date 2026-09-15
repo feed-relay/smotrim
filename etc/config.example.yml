@@ -19,7 +19,7 @@ test_data: true
 output_dir: var/rss
 itunes_owner_name: "Feed Relay Smotrim"
 itunes_owner_email: "feed-relay@example.com"
-generator: "Feed Relay Smotrim v0.1.0 (github.com/feed-relay/smotrim)"
+generator: "Feed Relay Smotrim v0.2.0 (github.com/feed-relay/smotrim)"
 
 subscriptions:
   - limit: 5
@@ -32,3 +32,20 @@ subscriptions:
       - "67390" # radiorus: Имя и время
       - "62250" # mayak: Физики и лирики
       - "65319" # mayak: АудиоСторис
+
+feeds:
+  # Радио России Санкт-Петербург
+  - slug: "radiorus-spb"
+    limit_per_show: 2
+    shows:
+      - "75260" # Спб - Дар слова
+      - "75396" # Спб - Детский остров
+      - "75252" # Спб - За чашкой кофе
+      - "75275" # Спб - Как это по-русски?
+      - "75226" # Спб - Любимые мелодии
+      - "75439" # Спб - Невское утро
+      - "75353" # Спб - Несгораемый шкаф
+      - "75732" # Спб - Петербургский автограф
+      - "75234" # Спб - Радиоклуб на Карповке
+      - "75279" # Спб - Городской наблюдатель
+      - "75223" # Спб - Пулковский меридиан
