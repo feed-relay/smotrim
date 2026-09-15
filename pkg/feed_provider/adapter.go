@@ -7,6 +7,7 @@ import (
 	"sort"
 	"time"
 
+	"github.com/feed-relay/contracts"
 	"github.com/feed-relay/rsscast"
 
 	"github.com/feed-relay/smotrim/internal/api"
@@ -35,10 +36,13 @@ type Config interface {
 	Generator() string
 	ItunesOwnerName() string
 	ItunesOwnerEmail() string
+
+	TestData() bool
+	HTTPTimeout() time.Duration
 }
 
 type Adapter interface {
-	Feed(ctx context.Context, shows []graphql.Show, audios map[int]*api.Audio) (*rsscast.Feed, error)
+	Feed(ctx context.Context, feed contracts.Feed, shows []graphql.Show, audios map[int]*api.Audio) (*rsscast.Feed, error)
 }
 
 type adapter struct {
@@ -59,6 +63,7 @@ func NewAdapter(config Config, fileSizer FileSizer) Adapter {
 // mergedEpisode pairs an episode with the channel of the show it came
 // from, so itunes:author stays correct once a feed spans several shows.
 type mergedEpisode struct {
+	brand   *graphql.Brand
 	episode *graphql.Episode
 	channel *graphql.Channel
 }
@@ -70,6 +75,7 @@ type mergedEpisode struct {
 // Episodes without a linked audio or matching audio entry are skipped.
 func (a *adapter) Feed(
 	ctx context.Context,
+	feed contracts.Feed,
 	shows []graphql.Show,
 	audios map[int]*api.Audio,
 ) (*rsscast.Feed, error) {
@@ -100,25 +106,43 @@ func (a *adapter) Feed(
 		return nil, errors.New("smotrim: no non-nil episode to seed pubDate from")
 	}
 
-	var feedImage string
-	if len(primary.Brand.Images) > 0 && len(primary.Brand.Images[0].Presets) > 0 {
-		feedImage = primary.Brand.Images[0].Presets[0].Link
+	feedImage := feed.Image()
+	if feedImage == "" {
+		if len(primary.Channel.Images) > 0 && len(primary.Channel.Images[0].Presets) > 0 {
+			feedImage = primary.Channel.Images[0].Presets[0].Link
+		}
+	}
+	feedTitle := feed.Title()
+	if feedTitle == "" {
+		feedTitle = primary.Channel.Title
+	}
+	feedDescription := feed.Description()
+	if feedDescription == "" {
+		feedDescription = primary.Channel.Description
+	}
+	if feedDescription == "" {
+		feedDescription = feedTitle
+	}
+	feedLink := feed.Link()
+	if feedLink == "" {
+		feedLink = fmt.Sprintf("https://smotrim.ru%s", primary.Channel.Slug)
 	}
 
 	feedData := rsscast.FeedData{
-		Title:       primary.Brand.Title,
-		Description: primary.Brand.Description,
+		Title:       feedTitle,
+		Description: feedDescription,
 		Image:       feedImage,
 		Language:    "ru",
 		Explicit:    rsscast.ExplicitFalse,
+		// T-ODO genres, subgenres -> rsscast.Category
 		Categories: []rsscast.Category{
 			rsscast.NewCategory("Society & Culture"),
 		},
 	}
 
-	feed := rsscast.NewFeed(feedData).
+	rssFeed := rsscast.NewFeed(feedData).
 		WithAuthor(primary.Channel.Title).
-		WithLink(fmt.Sprintf("https://smotrim.ru/brand/%d", primary.Brand.ID)).
+		WithLink(feedLink).
 		WithPubDate(pubDate).
 		WithLastBuildDate(time.Now()).
 		WithItunesTitle(feedData.Title).
@@ -136,8 +160,18 @@ func (a *adapter) Feed(
 			continue
 		}
 
+		var itemTitle string
+		if episode.Number > 0 {
+			if episode.Season != nil && episode.Season.Number > 0 {
+				itemTitle = fmt.Sprintf("%s: [%d-%d] %s", m.brand.Title, episode.Season.Number, episode.Number, episode.Title)
+			} else {
+				itemTitle = fmt.Sprintf("%s: [%d] %s", m.brand.Title, episode.Number, episode.Title)
+			}
+		} else {
+			itemTitle = fmt.Sprintf("%s: %s", m.brand.Title, episode.Title)
+		}
 		itemData := rsscast.ItemData{
-			Title: episode.Title,
+			Title: itemTitle,
 			Guid:  audio.ShareLink,
 			Enclosure: rsscast.Enclosure{
 				URL:    audio.Streams.Mp3,
@@ -156,7 +190,7 @@ func (a *adapter) Feed(
 			WithItunesExplicit(rsscast.ExplicitFalse).
 			WithItunesTitle(itemData.Title).
 			WithItunesEpisodeType(rsscast.EpisodeFull).
-			WithItunesAuthor(m.channel.Title)
+			WithItunesAuthor(m.brand.Title)
 
 		if len(episode.Images) > 0 && len(episode.Images[0].Presets) > 0 {
 			item.WithItunesImage(episode.Images[0].Presets[0].Link)
@@ -170,10 +204,10 @@ func (a *adapter) Feed(
 			item.WithItunesSeason(episode.Season.Number)
 		}
 
-		feed.AddItem(item)
+		rssFeed.AddItem(item)
 	}
 
-	return feed, nil
+	return rssFeed, nil
 }
 
 // flatten merges every show's episodes into one newest-first list, paired
@@ -186,7 +220,7 @@ func (a *adapter) flatten(shows []graphql.Show) []mergedEpisode {
 			continue
 		}
 		for _, episode := range show.Episodes {
-			merged = append(merged, mergedEpisode{episode: episode, channel: show.Channel})
+			merged = append(merged, mergedEpisode{brand: show.Brand, episode: episode, channel: show.Channel})
 		}
 	}
 
@@ -218,7 +252,7 @@ func (a *adapter) episodeAudio(episode *graphql.Episode, audios map[int]*api.Aud
 		return nil
 	}
 	audio := audios[episode.Audio.PublicId]
-	if audio == nil || audio.Streams.Mp3 == "" {
+	if audio == nil || audio.Streams == nil || audio.Streams.Mp3 == "" {
 		return nil
 	}
 	return audio

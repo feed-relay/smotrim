@@ -7,13 +7,17 @@ import (
 	"log/slog"
 	"sync"
 
+	"github.com/feed-relay/contracts"
 	"github.com/feed-relay/rsscast"
 
 	"github.com/feed-relay/smotrim/internal/api"
 	"github.com/feed-relay/smotrim/internal/api/graphql"
+	"github.com/feed-relay/smotrim/internal/media"
 )
 
 //go:generate moq --out ./mocks/client_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . Client
+
+const Platform = "smotrim"
 
 const feedWorkers = 4
 
@@ -29,17 +33,21 @@ type Client interface {
 	Audio(ctx context.Context, publicID int) (*api.Audio, error)
 }
 
-// Sub is the subset of contracts.Subscription that Feeds/feed need.
-type Sub interface {
-	PerShowLimit() int
+// Feed is the subset of contracts.Feed that Feeds/feed need.
+type Feed interface {
+	Limit() int
 	Shows() []string
+	Link() string
 	Slug() string
+	Title() string
+	Description() string
+	Image() string
 }
 
-// feedTask is one subscription to be processed by a worker; all of its
+// feedTask is one feed to be processed by a worker; all of its
 // shows are merged into a single feed.
 type feedTask struct {
-	subscription Sub
+	feed Feed
 }
 
 type Provider struct {
@@ -52,11 +60,30 @@ type Provider struct {
 // NOTE for review: same as NewAdapter - Provider's fields are unexported,
 // so black-box tests need a constructor. Add this if one doesn't already
 // exist under a different name.
-func NewProvider(client Client, adapter Adapter) *Provider {
-	return &Provider{client: client, adapter: adapter}
+func NewProvider(config Config) *Provider {
+	var client Client
+	var sizer FileSizer
+
+	if config.TestData() {
+		client = api.NewTestdataClient()
+		sizer = &media.EmptySizer{}
+	} else {
+		client = api.NewClient(config.HTTPTimeout())
+		sizer = media.NewHttpFileSizer(4)
+	}
+
+	return &Provider{
+		client: client,
+		adapter: &adapter{
+			config:    config,
+			fileSizer: sizer,
+		},
+	}
 }
 
-func (p *Provider) Platform() string { return "smotrim" }
+func (p *Provider) Platform() string {
+	return Platform
+}
 
 func (p *Provider) extractNumber(show string) (int, error) {
 	var n int
@@ -125,8 +152,8 @@ func (p *Provider) audioData(ctx context.Context, episodes []*graphql.Episode, r
 	return audioData, errors.Join(errs...)
 }
 
-func (p *Provider) feed(ctx context.Context, subscription Sub, requests chan struct{}) (string, *rsscast.Feed, error) {
-	showIDs := subscription.Shows()
+func (p *Provider) feed(ctx context.Context, feed Feed, requests chan struct{}) (string, *rsscast.Feed, error) {
+	showIDs := feed.Shows()
 
 	results := make([]graphql.Show, len(showIDs))
 	errs := make([]error, len(showIDs))
@@ -144,7 +171,7 @@ func (p *Provider) feed(ctx context.Context, subscription Sub, requests chan str
 				return
 			}
 
-			brandEpisodes, err := p.brandEpisodes(ctx, brandID, subscription.PerShowLimit(), requests)
+			brandEpisodes, err := p.brandEpisodes(ctx, brandID, feed.Limit(), requests)
 			if err != nil {
 				errs[i] = fmt.Errorf("show %q: fetch brand episodes failed: %w", show, err)
 				return
@@ -171,19 +198,19 @@ func (p *Provider) feed(ctx context.Context, subscription Sub, requests chan str
 
 	fetchErr := errors.Join(errs...)
 
-	var ok []graphql.Show
+	var shows []graphql.Show
 	for _, r := range results {
 		if r.Brand != nil {
-			ok = append(ok, r)
+			shows = append(shows, r)
 		}
 	}
 
-	if len(ok) == 0 {
+	if len(shows) == 0 {
 		return "", nil, fetchErr
 	}
 
 	var allEpisodes []*graphql.Episode
-	for _, r := range ok {
+	for _, r := range shows {
 		allEpisodes = append(allEpisodes, r.Episodes...)
 	}
 
@@ -192,24 +219,23 @@ func (p *Provider) feed(ctx context.Context, subscription Sub, requests chan str
 		slog.Error("smotrim: audio data err", "err", err)
 	}
 
-	feed, err := p.adapter.Feed(ctx, ok, audioData)
+	rssFeed, err := p.adapter.Feed(ctx, feed, shows, audioData)
 	if err != nil {
-		return "", feed, errors.Join(fmt.Errorf("build feed failed: %w", err), fetchErr)
+		return "", rssFeed, errors.Join(fmt.Errorf("build feed failed: %w", err), fetchErr)
 	}
 
-	slug := fmt.Sprintf("%s-subscription-%s", p.Platform(), subscription.Slug())
+	slug := fmt.Sprintf("%s-%s", p.Platform(), feed.Slug())
 
-	return slug, feed, fetchErr
+	return slug, rssFeed, fetchErr
 }
 
-func (p *Provider) Feeds(ctx context.Context, subscriptions []Sub) (map[string]*rsscast.Feed, error) {
-	//func (p *Provider) Feeds(ctx context.Context, subscriptions []contracts.Subscription) (map[string]*rsscast.Feed, error) {
+func (p *Provider) Feeds(ctx context.Context, feeds []contracts.Feed) (map[string]*rsscast.Feed, error) {
 	var allTasks []feedTask
-	for _, subscription := range subscriptions {
-		if len(subscription.Shows()) == 0 {
+	for _, f := range feeds {
+		if len(f.Shows()) == 0 {
 			continue
 		}
-		allTasks = append(allTasks, feedTask{subscription: subscription})
+		allTasks = append(allTasks, feedTask{feed: f})
 	}
 
 	workers := min(feedWorkers, len(allTasks))
@@ -222,7 +248,7 @@ func (p *Provider) Feeds(ctx context.Context, subscriptions []Sub) (map[string]*
 	var wg sync.WaitGroup
 	var mu sync.Mutex
 
-	feeds := make(map[string]*rsscast.Feed)
+	rssFeeds := make(map[string]*rsscast.Feed)
 	var errs []error
 
 	// Limits the total number of concurrent requests to p.client,
@@ -237,7 +263,7 @@ func (p *Provider) Feeds(ctx context.Context, subscriptions []Sub) (map[string]*
 			defer wg.Done()
 
 			for task := range tasks {
-				slug, feed, err := p.feed(ctx, task.subscription, requests)
+				slug, feed, err := p.feed(ctx, task.feed, requests)
 				if err != nil {
 					mu.Lock()
 					errs = append(errs, err)
@@ -248,7 +274,7 @@ func (p *Provider) Feeds(ctx context.Context, subscriptions []Sub) (map[string]*
 				}
 
 				mu.Lock()
-				feeds[slug] = feed
+				rssFeeds[slug] = feed
 				mu.Unlock()
 			}
 		}()
@@ -266,8 +292,8 @@ func (p *Provider) Feeds(ctx context.Context, subscriptions []Sub) (map[string]*
 		err = errors.Join(errs...)
 	}
 
-	if len(feeds) > 0 {
-		return feeds, err
+	if len(rssFeeds) > 0 {
+		return rssFeeds, err
 	}
 
 	return nil, err
