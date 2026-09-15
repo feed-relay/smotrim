@@ -28,7 +28,7 @@ The pipeline includes built-in feed validation to ensure the output is compliant
 
 ### Prerequisites
 
-- Go 1.21+
+- Go 1.26+
 - `golangci-lint` (for linting)
 - `moq` (for generating mocks)
 
@@ -71,9 +71,13 @@ The application is configured via a YAML file. Key configuration fields include:
 - `output_dir`: The directory where generated RSS files will be saved.
 - `itunes_owner_name`: The name of the feed owner, used in the Apple Podcasts metadata.
 - `itunes_owner_email`: The email of the feed owner, used in the Apple Podcasts metadata.
-- `generator`: A string describing the tool that generated the feed.
+- `generator`: A string describing the tool that generated the feed (e.g., "Feed Relay Smotrim v0.2.0").
 - `subscriptions`: A list of subscription configurations. This can be automatically generated via the `update-subs` utility (which produces `etc/subscriptions.smotrim.yml`). Each subscription consists of:
     - `limit`: The maximum number of episodes to include in the feed for this subscription.
+    - `shows`: A list of Smotrim show IDs to include in the feed.
+- `feeds`: A list of feed configurations, each generating a single XML file for multiple shows. Each feed consists of:
+    - `slug`: A unique identifier used in the output filename.
+    - `limit_per_show`: The maximum number of episodes to include per show in the feed.
     - `shows`: A list of Smotrim show IDs to include in the feed.
 
 ### Development Commands
