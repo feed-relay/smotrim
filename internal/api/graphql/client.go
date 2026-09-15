@@ -11,14 +11,17 @@ import (
 	"log/slog"
 	"net/http"
 	"net/url"
-
-	"golang.org/x/time/rate"
 )
 
 //go:generate moq --out ./mocks/roundtripper_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . RoundTripper
+//go:generate moq --out ./mocks/limiter_mock.go --pkg mocks --skip-ensure --with-resets -fmt goimports . Limiter
 
 type RoundTripper interface {
 	RoundTrip(*http.Request) (*http.Response, error)
+}
+
+type Limiter interface {
+	Wait(context.Context) error
 }
 
 // defaultEndpoint is used whenever Client.Endpoint is left empty.
@@ -53,7 +56,7 @@ type Client struct {
 	// AuthToken, when set, is sent as a Bearer token.
 	AuthToken string
 
-	Limiter *rate.Limiter
+	Limiter Limiter
 }
 
 // NewClient returns a Client with sane defaults (http.DefaultClient and

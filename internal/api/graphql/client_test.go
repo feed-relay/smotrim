@@ -387,3 +387,46 @@ func TestClient_md5Hex(t *testing.T) {
 	assert.Equal(t, mustMD5Hex([]byte("hello")), got)
 	assert.Len(t, got, 32) // an md5 hex digest is always 32 chars
 }
+
+func TestClientRequest_WaitsForLimiter(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":{"foo":"bar"}}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	limiter := &mocks.LimiterMock{
+		WaitFunc: func(context.Context) error {
+			return nil
+		},
+	}
+
+	c := &Client{Endpoint: srv.URL, Limiter: limiter}
+	err := c.Do(context.Background(), "Op", "query", "", nil)
+
+	assert.NoError(t, err)
+	if len(limiter.WaitCalls()) != 1 {
+		t.Fatalf("expected 1 call, got %d", len(limiter.WaitCalls()))
+	}
+}
+
+func TestClientRequest_LimiterError(t *testing.T) {
+	expectedErr := errors.New("rate limit")
+
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		_, _ = w.Write([]byte(`{"data":{"foo":"bar"}}`))
+	}))
+	t.Cleanup(srv.Close)
+
+	limiter := &mocks.LimiterMock{
+		WaitFunc: func(context.Context) error {
+			return expectedErr
+		},
+	}
+
+	c := &Client{Endpoint: srv.URL, Limiter: limiter}
+	err := c.Do(context.Background(), "Op", "query", "", nil)
+
+	if !errors.Is(err, expectedErr) {
+		t.Fatalf("expected %v, got %v", expectedErr, err)
+	}
+}
